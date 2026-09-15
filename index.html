@@ -7,7 +7,7 @@
 <meta name="description" content="Corta los silencios, pone los subtítulos y te deja editar desde el texto. Tu video no sale de tu computador.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* PALETA LINO — análoga cálida sobre papel.
      Los grises NO son grises puros: llevan el matiz del ámbar. Por eso todo
@@ -15,57 +15,57 @@
      secundario (terracota) son vecinos en el círculo de color, así que se
      acompañan en vez de pelear.
      La jerarquía la dan las capas de fondo, no un borde en cada caja. */
+  /* Claro con lineas, video sobre negro. Un solo acento, usado poco.
+     Los grandes (Linear, Stripe, Vercel) no tienen mas diseno: tienen menos.
+     Aqui: sin cajas con sombra, sin texto explicativo al lado de cada control,
+     tres pesos de letra y el detalle aparece al pasar el mouse. */
   :root{
-    /* El fondo de la aplicacion es beige MEDIO y las tarjetas son blancas.
-       Esa diferencia de valor es la que crea las capas. Antes todo estaba
-       dentro de dos tonos de beige casi iguales y por eso se veia plano. */
-    --lienzo:#DED7C8;          /* el fondo de todo, el mas oscuro */
-    --tarjeta:#FFFFFF;         /* las cajas, que flotan encima */
-    --f0:#DED7C8; --f1:#FFFFFF; --f2:#F3EFE6; --f3:#E7E1D3;
-    --borde:#E8E2D5; --borde2:#CFC6B4;
-    --tx:#1E1A15; --tx2:#5B5347; --tx3:#8C8375; --tx4:#B5AC9C;
-    --ac:#D98C00; --ac2:#A8481A; --sobreAc:#FFFFFF;
-    --acSuave:#FDF2DC; --acSombra:rgba(217,140,0,.32);
-    --escena:#241F19; --rojo:#C0392B;
-    --r:8px; --rTarjeta:12px;
-    --sombra:0 1px 2px rgba(60,48,30,.06), 0 6px 18px rgba(60,48,30,.07);
-    --sombraAlta:0 2px 4px rgba(60,48,30,.08), 0 14px 34px rgba(60,48,30,.12);
+    --fondo:#F7F7F5;          /* el lienzo */
+    --barra:#FFFFFF;          /* paneles */
+    --hover:#FBF3E2;          /* beige calido al pasar el mouse: el de la marca */
+    --supAc:#FDF0D9;          /* lo activo */
+    --linea:#EAE7E0;          /* las lineas que separan cada grupo */
+    --tx:#17171A; --tx2:#55565B; --tx3:#83848A; --tx4:#AEAFB4;
+    --ac:#C27C00; --ac2:#A8481A; --sobreAc:#FFFFFF;
+    --acSuave:#FDF0D9; --acSombra:rgba(194,124,0,.22);
+    --escena:#0B0C0D; --rojo:#C0392B;
+    --r:6px; --rTarjeta:8px;
+    --tarjeta:#FFFFFF; --lienzo:#F7F7F5;
+    --borde:#EAE7E0; --borde2:#D8D4CB;
+    --f0:#F7F7F5; --f1:#FFFFFF; --f2:#F2F2F0; --f3:#E7E7E4;
+    --sombra:none; --sombraAlta:none;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--f0);color:var(--tx);font-family:Montserrat,sans-serif;
-       font-size:14px;height:100vh;display:flex;flex-direction:column;overflow:hidden;
+  body{background:var(--fondo);color:var(--tx);font-family:Montserrat,system-ui,sans-serif;
+       font-size:13.5px;font-weight:400;letter-spacing:-.011em;
+       height:100vh;display:flex;flex-direction:column;overflow:hidden;
        -webkit-font-smoothing:antialiased}
 
   /* ------------------------------------------------------------- cabecera */
-  header{background:var(--tarjeta);flex-shrink:0;display:flex;align-items:stretch;
-         height:62px;box-shadow:0 1px 3px rgba(60,48,30,.09);position:relative;z-index:10}
-  .logo{display:flex;align-items:center;padding:0 24px;font-weight:900;font-size:17px;
-        letter-spacing:-.03em;white-space:nowrap}
+  header{background:var(--barra);flex-shrink:0;display:flex;align-items:center;
+         height:52px;border-bottom:1px solid var(--linea);padding:0 16px;gap:18px;
+         position:relative;z-index:10}
+  .logo{font-weight:600;font-size:14px;letter-spacing:-.03em;white-space:nowrap}
   .logo b{color:var(--ac)}
-  .cifras{display:flex;align-items:stretch}
-  .cif{display:flex;flex-direction:column;justify-content:center;padding:0 16px;min-width:78px;
-       position:relative}
-  .cif + .cif:before{content:'';position:absolute;left:0;top:16px;bottom:16px;width:1px;
-                     background:var(--borde)}
-  .cif s{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--tx3);
-         text-decoration:none;margin-bottom:2px}
-  .cif b{font-size:16px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+  .cifras{display:flex;align-items:center;gap:16px}
+  .cif{display:flex;align-items:baseline;gap:6px}
+  .cif s{font-size:11px;color:var(--tx3);text-decoration:none;font-weight:400;letter-spacing:0}
+  .cif b{font-size:13px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
   .cif.viva b{color:var(--ac)}
-  .fin{margin-left:auto;display:flex;align-items:center;gap:8px;padding:0 20px}
-  .btn{font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;
-       padding:11px 24px;border:0;border-radius:var(--r);
-       background:var(--ac);color:var(--sobreAc);transition:.14s;
-       text-decoration:none;display:inline-block;box-shadow:0 2px 6px var(--acSombra)}
-  .btn:hover{filter:brightness(1.07);transform:translateY(-1px);
-             box-shadow:0 4px 12px var(--acSombra)}
+  .fin{margin-left:auto;display:flex;align-items:center;gap:7px}
+  .btn{font-family:inherit;font-weight:500;font-size:12.5px;letter-spacing:-.01em;
+       cursor:pointer;padding:7px 15px;border:1px solid transparent;border-radius:6px;
+       background:var(--ac);color:var(--sobreAc);text-decoration:none;display:inline-block;
+       transition:transform .09s,filter .12s,background .12s}
+  .btn:hover{filter:brightness(1.08)}
+  .btn:active{transform:scale(.97)}
   .btn:disabled{opacity:.45;cursor:default}
-  .btn.suave{background:var(--f2);color:var(--tx);box-shadow:inset 0 0 0 1px var(--borde2)}
-  .btn.suave:hover{background:var(--f3);filter:none;transform:none;
-                   box-shadow:inset 0 0 0 1px var(--tx4)}
+  .btn.suave{background:var(--barra);color:var(--tx);border-color:var(--borde2)}
+  .btn.suave:hover{background:var(--f2);filter:none}
   .btn.chico{padding:8px 15px;font-size:12.5px}
 
   /* --------------------------------------------------------------- cuerpo */
-  .cuerpo{flex:1;display:grid;grid-template-columns:330px 1fr;overflow:hidden}
+  .cuerpo{flex:1;display:grid;grid-template-columns:268px 1fr;overflow:hidden}
 
   /* La barra de desplazamiento del sistema se ve como un bloque gris pegado.
      Esta va del color del lienzo y solo aparece cuando hace falta. */
@@ -80,44 +80,49 @@
 
   /* El panel es el LIENZO, y cada bloque es una tarjeta que flota encima.
      Esa separacion por capas es lo que quita la sensacion de plano. */
-  .panel{background:var(--lienzo);overflow-y:auto;padding:16px 14px 36px}
-  .bloque{background:var(--tarjeta);border-radius:var(--rTarjeta);padding:16px 14px;
-          margin-bottom:14px;box-shadow:var(--sombra)}
-  .bloque h3{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tx2);
-             font-weight:700;margin:0 0 4px;display:flex;align-items:center;gap:8px}
-  /* Un punto de color delante de cada titulo: da ritmo y dice donde empieza cada cosa */
-  .bloque h3:before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ac);
+  /* Sin cajas: cada grupo se separa con una linea y con espacio */
+  .panel{background:var(--barra);border-right:1px solid var(--linea);
+         overflow-y:auto;padding:16px 10px 32px}
+  .bloque{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--linea)}
+  .bloque:last-child{border-bottom:0;padding-bottom:0}
+  .bloque h3{font-size:11px;font-weight:500;color:var(--tx2);letter-spacing:-.005em;
+             margin:0 8px 9px;display:flex;align-items:center;gap:7px}
+  /* Una linea corta de acento delante del titulo: dice donde empieza cada cosa */
+  .bloque h3:before{content:'';width:14px;height:2px;background:var(--ac);border-radius:1px;
                     flex-shrink:0}
-  .bloque .pie{font-size:11.5px;color:var(--tx3);margin:0 0 12px;line-height:1.55}
+  .bloque .pie{display:none}   /* el detalle sale al pasar el mouse, no escrito al lado */
+  .vacio{font-size:11.5px;color:var(--tx4);margin:0 8px 4px;line-height:1.5}
 
   /* Configuraciones guardadas */
-  .g{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r);
-     cursor:pointer;transition:.14s;margin-bottom:3px;position:relative;
-     background:var(--f2)}
-  .g:hover{background:var(--f3)}
-  .g.on{background:var(--acSuave);box-shadow:inset 3px 0 0 var(--ac)}
-  .g .pt{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:var(--tx3)}
+  .g{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:6px;
+     cursor:pointer;transition:background .1s;margin-bottom:1px;position:relative;
+     color:var(--tx2);font-size:13px}
+  .g:hover{background:var(--hover);color:var(--tx)}
+  .g.on{background:var(--supAc);color:var(--tx);box-shadow:inset 2px 0 0 var(--ac)}
+  .g .pt{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--tx4)}
   .g.on .pt{background:var(--ac)}
-  .g b{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .g.on b{color:var(--ac)}
+  .g b{font-weight:400;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .g.on b{font-weight:500}
   .g .x{margin-left:auto;color:var(--tx4);font-size:15px;line-height:1;padding:2px 4px;border-radius:3px}
   .g .x:hover{color:var(--rojo);background:var(--f3)}
-  .nueva{width:100%;margin-top:6px;padding:11px;background:transparent;color:var(--tx3);
-         border:1px dashed var(--borde2);border-radius:var(--r);font-family:inherit;
-         font-size:12.5px;font-weight:600;cursor:pointer;transition:.12s}
-  .nueva:hover{color:var(--ac);border-color:var(--ac)}
+  .g:hover .x{color:var(--tx3)}
+  .nueva{width:100%;margin-top:6px;padding:7px;background:transparent;color:var(--tx3);
+         border:1px solid var(--borde2);border-radius:6px;font-family:inherit;
+         font-size:12px;font-weight:500;cursor:pointer;transition:.12s}
+  .nueva:hover{color:var(--tx);border-color:var(--tx4);background:var(--hover)}
+  .nueva:active{transform:scale(.98)}
 
   /* Estilos de subtítulo */
-  .e{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:var(--r);
-     cursor:pointer;transition:.14s;margin-bottom:3px;background:var(--f2)}
-  .e:hover{background:var(--f3)}
-  .e.on{background:var(--acSuave);box-shadow:inset 3px 0 0 var(--ac)}
-  .e.on .nom{color:var(--ac);font-weight:700}
-  .mini{width:44px;height:26px;border-radius:5px;flex-shrink:0;display:flex;
-        align-items:center;justify-content:center;font-size:7px;font-weight:900;
-        background:var(--escena);color:#F2EDE4;box-shadow:0 1px 3px rgba(0,0,0,.18)}
-  .e .nom{font-size:13.5px;display:block;line-height:1.3}
-  .e .que{font-size:11px;color:var(--tx3);display:block;line-height:1.3}
+  .e{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:6px;
+     cursor:pointer;transition:background .1s;margin-bottom:1px;color:var(--tx2)}
+  .e:hover{background:var(--hover);color:var(--tx)}
+  .e.on{background:var(--supAc);color:var(--tx);box-shadow:inset 2px 0 0 var(--ac)}
+  .e.on .nom{font-weight:500}
+  .mini{width:38px;height:22px;border-radius:4px;flex-shrink:0;display:flex;
+        align-items:center;justify-content:center;font-size:7px;font-weight:600;
+        background:var(--escena);color:#EFEDEA;border:1px solid var(--linea)}
+  .e .nom{font-size:13px;display:block;line-height:1.3;font-weight:400}
+  .e .que{display:none}       /* va en el titulo emergente, no ocupando la pantalla */
 
   /* Deslizadores */
   .ctl{padding:0 8px;margin-bottom:16px}
@@ -143,113 +148,114 @@
                           font-family:inherit;text-transform:uppercase;letter-spacing:.02em}
   .color input[type=text]:focus{outline:none;border-color:var(--ac)}
   .color input[type=text].malo{border-color:var(--rojo)}
-  .color.activa .nom{color:var(--ac);font-weight:700}
+  .color.activa .nom{color:var(--tx);font-weight:500}
   .color.apagada{opacity:.42}
   .paleta{display:flex;align-items:center;gap:7px;margin:10px 8px 0}
   .paleta s{font-size:11px;color:var(--tx3);text-decoration:none;margin-right:2px}
-  .chip-c{width:22px;height:22px;border-radius:5px;border:1px solid var(--borde2);cursor:pointer;padding:0}
-  .chip-c:hover{transform:scale(1.12)}
+  .chip{width:22px;height:22px;border-radius:5px;border:1px solid var(--borde2);cursor:pointer;padding:0}
+  .chip:hover{transform:scale(1.12)}
 
-  .check{display:flex;align-items:flex-start;gap:9px;padding:9px 10px;border-radius:var(--r);
-         cursor:pointer;transition:.14s;background:var(--f2);margin-bottom:3px}
-  .check:hover{background:var(--f3)}
-  .check input{accent-color:var(--ac);width:15px;height:15px;margin:2px 0 0;flex-shrink:0;cursor:pointer}
-  .check .nom{font-size:13px;display:block;line-height:1.35}
-  .check .que{font-size:11px;color:var(--tx3);display:block;line-height:1.4;margin-top:1px}
+  .check{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:6px;
+         cursor:pointer;transition:background .1s;margin-bottom:1px;color:var(--tx2)}
+  .check:hover{background:var(--hover);color:var(--tx)}
+  .check input{accent-color:var(--ac);width:15px;height:15px;margin:0;flex-shrink:0;cursor:pointer}
+  .check .nom{font-size:12.5px;display:block;line-height:1.35}
+  .check .que{display:none}   /* el detalle sale al pasar el mouse */
 
   #muestra{margin:12px 8px 0;border-radius:var(--r);width:calc(100% - 16px);display:block}
 
   /* --------------------------------------------------------------- centro */
-  .centro{display:flex;flex-direction:column;overflow:hidden;background:var(--lienzo);
-          padding:14px 14px 14px 0;gap:12px}
+  .centro{display:flex;flex-direction:column;overflow:hidden;background:var(--fondo)}
 
   /* Entrada */
   #zona{margin:auto;max-width:600px;width:100%;text-align:center;padding:72px 40px;
-        background:var(--tarjeta);border:2px dashed var(--borde2);border-radius:var(--rTarjeta);
-        cursor:pointer;transition:.15s;box-shadow:var(--sombra)}
-  #zona:hover,#zona.encima{border-color:var(--ac);background:var(--acSuave);
-                           box-shadow:var(--sombraAlta);transform:translateY(-2px)}
+        background:var(--barra);border:1px dashed var(--borde2);border-radius:10px;
+        cursor:pointer;transition:.15s}
+  #zona:hover,#zona.encima{border-color:var(--ac);background:var(--hover)}
   #zona .icono{font-size:44px;line-height:1}
-  #zona .grande{font-size:22px;font-weight:900;margin:16px 0 8px;letter-spacing:-.02em}
+  #zona .grande{font-size:21px;font-weight:600;margin:16px 0 8px;letter-spacing:-.03em}
   #zona .chico{font-size:13.5px;color:var(--tx3);line-height:1.7}
   #archivo{display:none}
 
   /* Trabajando */
-  #estado{display:none;margin:auto;max-width:540px;width:100%;background:var(--tarjeta);
-          border-radius:var(--rTarjeta);padding:30px;box-shadow:var(--sombraAlta)}
-  #paso{font-size:17px;font-weight:700}
+  #estado{display:none;margin:auto;max-width:540px;width:100%;background:var(--barra);
+          border:1px solid var(--linea);border-radius:10px;padding:28px}
+  #paso{font-size:16px;font-weight:500;letter-spacing:-.02em}
   #detalle{font-size:13px;color:var(--tx3);margin-top:6px;min-height:19px;line-height:1.5}
   .progreso{height:5px;background:var(--f3);border-radius:3px;margin-top:18px;overflow:hidden}
   .progreso div{height:100%;width:0;background:var(--ac);transition:width .25s;border-radius:3px}
 
   /* Mesa de trabajo */
   #mesa{display:none;flex-direction:column;overflow:hidden;height:100%}
+  /* El area del video SIEMPRE en negro, aunque el resto sea claro */
   .lienzo{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;
-          min-height:0;background:var(--escena);border-radius:var(--rTarjeta);
-          box-shadow:var(--sombraAlta)}
-  #cuadro{max-width:100%;max-height:100%;border-radius:var(--r);
-          box-shadow:0 10px 34px rgba(0,0,0,.42)}
-  .transporte{display:flex;align-items:center;gap:15px;padding:12px 18px;
-              background:var(--tarjeta);border-radius:var(--rTarjeta);box-shadow:var(--sombra)}
-  .play{width:40px;height:40px;border-radius:50%;flex-shrink:0;cursor:pointer;background:var(--ac);
-        color:var(--sobreAc);border:0;font-size:13px;box-shadow:0 2px 8px var(--acSombra)}
+          min-height:0;background:var(--escena)}
+  #cuadro{max-width:100%;max-height:100%;border-radius:4px}
+  .transporte{display:flex;align-items:center;gap:13px;padding:11px 18px;
+              background:var(--barra);border-top:1px solid var(--linea)}
+  .play{width:30px;height:30px;border-radius:50%;flex-shrink:0;cursor:pointer;background:var(--ac);
+        color:var(--sobreAc);border:0;font-size:10px;transition:transform .09s}
+  .play:active{transform:scale(.94)}
   #momento{flex:1;margin:0}
-  .t{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .t em{color:var(--tx3);font-style:normal;font-weight:500}
+  .t{font-size:12px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .t em{color:var(--tx3);font-style:normal;font-weight:400}
 
   /* Texto */
-  .texto{background:var(--tarjeta);border-radius:var(--rTarjeta);box-shadow:var(--sombra);
-         padding:16px 20px 18px;display:flex;flex-direction:column;min-height:0;max-height:36vh}
-  .texto h3{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--tx2);
-            font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:8px}
-  .texto h3:before{content:'';width:6px;height:6px;border-radius:50%;background:var(--ac)}
+  .texto{background:var(--barra);border-top:1px solid var(--linea);
+         padding:14px 20px 16px;display:flex;flex-direction:column;min-height:0;max-height:36vh}
+  .texto h3{font-size:11px;font-weight:500;color:var(--tx2);margin-bottom:6px;
+            display:flex;align-items:center;gap:7px}
+  .texto h3:before{content:'';width:14px;height:2px;background:var(--ac);border-radius:1px}
   .ayuda{font-size:12px;color:var(--tx3);margin-bottom:12px;line-height:1.6}
   .ayuda b{color:var(--tx2)}
   .zona-texto{position:relative;flex:1;min-height:0}
-  #transcripcion{font-size:15px;line-height:2.5;overflow-y:auto;height:100%;padding-right:6px}
+  /* El renglon va suelto A PROPOSITO: el lapiz y la estrella flotan en el hueco
+     entre lineas. Con 2.5 el hueco medía 13px y los botones 22px, asi que siempre
+     tapaban una palabra de la linea de arriba y no se le podia dar clic. */
+  #transcripcion{font-size:15px;line-height:3;letter-spacing:-.008em;
+                 overflow-y:auto;height:100%;padding-right:6px}
   .pal{padding:3px 4px;border-radius:3px;cursor:pointer;transition:background .1s}
-  .pal:hover{background:var(--f3)}
+  .pal:hover{background:var(--hover)}
   .pal.fuera{color:var(--tx4);text-decoration:line-through;text-decoration-thickness:2px}
   .pal.tocada{color:var(--ac2);font-weight:600}
   .pal.clave{color:var(--ac2);font-weight:700;box-shadow:inset 0 -2px 0 var(--ac2)}
-  .pal.sonando{background:var(--ac);color:var(--sobreAc);font-weight:700}
+  .pal.sonando{background:var(--ac);color:var(--sobreAc);font-weight:500}
   .pal.editando{background:var(--f3);outline:1px solid var(--ac)}
   .ficha{font-size:10.5px;padding:2px 7px;border-radius:9px;background:var(--f2);
          color:var(--tx3);vertical-align:middle;font-variant-numeric:tabular-nums}
   .ficha.sonido{background:var(--acSuave);color:var(--ac2)}
   .ficha.fuera{text-decoration:none;opacity:.5}
-  #lapiz,#clave{position:absolute;display:none;width:24px;height:22px;padding:0;
+  #lapiz,#clave{position:absolute;display:none;width:24px;height:20px;padding:0;
                 border-radius:5px;border:1px solid var(--ac);background:var(--f1);
                 color:var(--ac);font-size:12px;cursor:pointer;line-height:1;z-index:5}
   #lapiz:hover,#clave:hover{background:var(--ac);color:var(--sobreAc)}
   .resumen{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:12px;
            font-size:12.5px;color:var(--tx3);flex-shrink:0}
-  .resumen b{color:var(--tx);font-weight:700;font-variant-numeric:tabular-nums}
+  .resumen b{color:var(--tx);font-weight:500;font-variant-numeric:tabular-nums}
 
   /* Resultado */
   #listo{display:none;flex-direction:column;overflow:auto;padding:20px;height:100%;
-         background:var(--tarjeta);border-radius:var(--rTarjeta);box-shadow:var(--sombra)}
-  #resultado{width:100%;max-height:62vh;border-radius:var(--r);background:#000;display:block;
-             box-shadow:0 8px 28px rgba(0,0,0,.2)}
+         background:var(--fondo)}
+  #resultado{width:100%;max-height:62vh;border-radius:6px;background:#000;display:block}
   .acciones{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 
-  .aviso{background:var(--acSuave);border-left:3px solid var(--ac);color:#6B4A00;
-         padding:12px 15px;font-size:13px;display:none;
-         border-radius:0 var(--r) var(--r) 0;line-height:1.55;box-shadow:var(--sombra)}
+  .aviso{background:var(--supAc);border-left:2px solid var(--ac);color:#6B4A00;
+         padding:11px 15px;font-size:12.5px;display:none;line-height:1.55}
 
-  footer{background:var(--tarjeta);box-shadow:0 -1px 3px rgba(60,48,30,.07);padding:12px 24px;
+  footer{background:var(--barra);border-top:1px solid var(--linea);padding:11px 20px;
          font-size:12.5px;color:var(--tx3);display:flex;justify-content:space-between;
          gap:14px;flex-wrap:wrap;flex-shrink:0}
-  footer a{color:var(--ac2);text-decoration:none;font-weight:700}
+  footer a{color:var(--ac2);text-decoration:none;font-weight:500}
   footer a:hover{text-decoration:underline}
 
   /* Diálogo para ponerle nombre a la configuración */
-  .velo{position:fixed;inset:0;background:rgba(35,31,25,.5);display:none;
+  .velo{position:fixed;inset:0;background:rgba(24,22,18,.34);display:none;
         align-items:center;justify-content:center;z-index:50}
   .velo.abierto{display:flex}
-  .dialogo{background:var(--tarjeta);border-radius:14px;padding:28px;width:390px;max-width:92vw;
-           box-shadow:0 24px 60px rgba(35,31,25,.3)}
-  .dialogo h4{font-size:17px;font-weight:700;margin-bottom:6px}
+  .dialogo{background:var(--barra);border:1px solid var(--linea);border-radius:12px;
+           padding:26px;width:390px;max-width:92vw;
+           box-shadow:0 20px 50px rgba(24,22,18,.18)}
+  .dialogo h4{font-size:16px;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
   .dialogo p{font-size:12.5px;color:var(--tx3);line-height:1.55;margin-bottom:16px}
   .dialogo input{width:100%;background:var(--f2);border:1px solid var(--borde);
                  border-radius:var(--r);padding:11px 12px;font-family:inherit;font-size:14px;
@@ -281,7 +287,7 @@
       <h3>Mis configuraciones</h3>
       <p class="pie">Guarda tus colores y tu estilo con un nombre. Ten uno por marca o por cliente y cambia con un clic.</p>
       <div id="listaConfigs"></div>
-      <button class="nueva" id="guardarConfig">Guardar esta configuración</button>
+      <button class="nueva" id="guardarConfig">Guardar colores y estilo</button>
     </div>
 
     <div class="bloque">
@@ -330,10 +336,10 @@
       </div>
       <div class="paleta">
         <s>De tu marca:</s>
-        <button type="button" class="chip-c" data-color="#F8B400" style="background:#F8B400" title="Amarillo #F8B400"></button>
-        <button type="button" class="chip-c" data-color="#0F0F14" style="background:#0F0F14" title="Negro #0F0F14"></button>
-        <button type="button" class="chip-c" data-color="#FFFFFF" style="background:#FFFFFF" title="Blanco #FFFFFF"></button>
-        <button type="button" class="chip-c" data-color="#21209C" style="background:#21209C" title="Azul #21209C"></button>
+        <button type="button" class="chip" data-color="#F8B400" style="background:#F8B400" title="Amarillo #F8B400"></button>
+        <button type="button" class="chip" data-color="#0F0F14" style="background:#0F0F14" title="Negro #0F0F14"></button>
+        <button type="button" class="chip" data-color="#FFFFFF" style="background:#FFFFFF" title="Blanco #FFFFFF"></button>
+        <button type="button" class="chip" data-color="#21209C" style="background:#21209C" title="Azul #21209C"></button>
       </div>
 
       <canvas id="muestra" width="360" height="130"></canvas>
@@ -357,19 +363,19 @@
 
     <div class="bloque">
       <h3>Edición</h3>
-      <label class="check"><input type="checkbox" id="cortar" checked>
+      <label class="check" title="Mide el audio y corta donde nadie habla"><input type="checkbox" id="cortar" checked>
         <span><span class="nom">Quitar los silencios</span>
         <span class="que">Mide el audio y corta donde nadie habla</span></span></label>
-      <label class="check"><input type="checkbox" id="repetidas" checked>
+      <label class="check" title="Cuando te equivocas y vuelves a empezar la frase"><input type="checkbox" id="repetidas" checked>
         <span><span class="nom">Marcar tomas repetidas</span>
         <span class="que">Cuando te equivocas y vuelves a empezar la frase</span></span></label>
-      <label class="check"><input type="checkbox" id="muletillas" checked>
+      <label class="check" title="Los eh, mm y o sea no salen en el subtitulo"><input type="checkbox" id="muletillas" checked>
         <span><span class="nom">Quitar muletillas del texto</span>
         <span class="que">Los "eh", "mm" y "o sea" no salen en el subtítulo</span></span></label>
-      <label class="check"><input type="checkbox" id="salto" checked>
+      <label class="check" title="El subtitulo aparece creciendo, no pegado"><input type="checkbox" id="salto" checked>
         <span><span class="nom">Entrada con salto</span>
         <span class="que">El subtítulo aparece creciendo, no pegado</span></span></label>
-      <label class="check"><input type="checkbox" id="emparejar" checked>
+      <label class="check" title="Sube la voz al nivel que usan las redes"><input type="checkbox" id="emparejar" checked>
         <span><span class="nom">Emparejar el volumen</span>
         <span class="que">Sube la voz al nivel que usan las redes</span></span></label>
       <div class="ctl" style="margin-top:14px">
