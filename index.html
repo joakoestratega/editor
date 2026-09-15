@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editor de reels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --negro:#0F0F14; --amarillo:#F8B400; --blanco:#fff; --gris:#8A8A99;
+          --linea:#2A2A35; --caja:#16161F; --rojo:#FF6B6B; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--negro); color:var(--blanco);
+         font-family:Montserrat,'Segoe UI',system-ui,sans-serif; min-height:100vh;
+         display:flex; flex-direction:column; }
+  header { padding:24px 28px 0; }
+  header h1 { font-size:23px; font-weight:900; margin:0; letter-spacing:-.02em; }
+  header h1 span { color:var(--amarillo); }
+  header p { color:var(--gris); font-size:13.5px; margin:5px 0 0; }
+  main { flex:1; padding:22px 28px; display:grid; grid-template-columns:minmax(0,1fr) 370px;
+         gap:22px; align-items:start; }
+  @media (max-width:1000px){ main { grid-template-columns:1fr; } }
+
+  /* Entrada */
+  #zona { border:2px dashed var(--linea); border-radius:14px; padding:54px 24px;
+          text-align:center; cursor:pointer; transition:.15s; background:var(--caja); }
+  #zona:hover, #zona.encima { border-color:var(--amarillo); background:#1C1C27; }
+  #zona .icono { font-size:40px; }
+  #zona .grande { font-size:19px; font-weight:700; margin:12px 0 6px; }
+  #zona .chico { font-size:13px; color:var(--gris); }
+  #archivo { display:none; }
+
+  /* Trabajo en curso */
+  #estado { display:none; background:var(--caja); border:1px solid var(--linea);
+            border-radius:14px; padding:22px; }
+  #paso { font-size:16px; font-weight:700; }
+  #detalle { font-size:13px; color:var(--gris); margin-top:5px; min-height:18px; }
+  .barra { height:6px; background:var(--linea); border-radius:3px; margin-top:16px; overflow:hidden; }
+  .barra div { height:100%; width:0; background:var(--amarillo); transition:width .25s; }
+
+  /* Mesa de trabajo */
+  #mesa { display:none; }
+  .lienzo { background:#000; border-radius:12px; overflow:hidden; display:flex;
+            justify-content:center; align-items:center; }
+  #cuadro { max-width:100%; max-height:46vh; display:block; }
+  #momento { margin-top:12px; }
+
+  .mando { display:flex; align-items:center; gap:12px; margin-top:12px; }
+  .mando #momento { flex:1; margin:0; }
+  .redondo { width:42px; height:42px; border-radius:50%; border:0; cursor:pointer;
+             background:var(--amarillo); color:var(--negro); font-size:15px;
+             font-family:inherit; flex-shrink:0; }
+  .reloj { font-size:12.5px; color:var(--gris); font-variant-numeric:tabular-nums;
+           white-space:nowrap; }
+  .reloj b { color:var(--blanco); }
+
+  /* Transcripción */
+  .texto-caja { background:var(--caja); border:1px solid var(--linea); border-radius:14px;
+                padding:16px; margin-top:16px; }
+  .texto-caja h2 { font-size:12px; text-transform:uppercase; letter-spacing:.09em;
+                   color:var(--amarillo); margin:0 0 4px; font-weight:700; }
+  .ayuda { font-size:12.5px; color:var(--gris); margin:0 0 12px; line-height:1.6; }
+  #transcripcion { font-size:15.5px; line-height:2.1; max-height:30vh; overflow-y:auto;
+                   padding-right:6px; }
+  .pal { cursor:pointer; padding:2px 3px; border-radius:4px; transition:.1s; }
+  .pal:hover { background:#2A2A35; }
+  .pal.fuera { color:#5A5A68; text-decoration:line-through; text-decoration-thickness:2px; }
+  .pal.tocada { color:var(--amarillo); font-weight:600; }
+  .pal.sonando { background:var(--amarillo); color:var(--negro); font-weight:700; }
+  .pal.editando { background:#2A2A35; outline:1px solid var(--amarillo); }
+  /* Las fichas son los pedazos de audio que NO son palabras: un silencio o un
+     sonido que el reconocimiento no escribió. Se ven distinto del texto para
+     que no estorben al leer, pero se pueden quitar y devolver igual. */
+  .ficha { font-family:Consolas,monospace; font-size:11.5px; padding:2px 6px;
+           border-radius:10px; vertical-align:middle; }
+  .ficha.silencio { background:#1E1E29; color:#5A5A68; border:1px solid #2A2A35; }
+  .ficha.sonido { background:#3A2E00; color:#FFD466; border:1px solid #5C4200; }
+  .ficha.fuera { text-decoration:none; opacity:.45; }
+  .pausa { color:#3A3A48; }
+  /* El lápiz es un blanco aparte del de tachar: un clic y otro clic nunca
+     pueden ser la misma cosa. Antes corregir era doble clic, y como el doble
+     clic empieza por un clic, al ir a corregir también se tachaba. */
+  .zona-texto { position:relative; }
+  #lapiz { position:absolute; display:none; width:24px; height:24px; padding:0;
+           border-radius:6px; border:1px solid var(--amarillo); background:var(--negro);
+           color:var(--amarillo); font-size:13px; cursor:pointer; line-height:1;
+           z-index:5; }
+  #lapiz:hover { background:var(--amarillo); color:var(--negro); }
+  .resumen { font-size:12.5px; color:var(--gris); margin-top:12px;
+             display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+  .resumen b { color:var(--blanco); font-weight:700; }
+
+  /* Resultado */
+  #listo { display:none; }
+  video { width:100%; max-height:60vh; border-radius:12px; background:#000; }
+  .acciones { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+  .boton { background:var(--amarillo); color:var(--negro); border:0; border-radius:9px;
+           padding:13px 24px; font-size:15px; font-weight:700; cursor:pointer;
+           font-family:inherit; text-decoration:none; display:inline-block; }
+  .boton.gris { background:transparent; color:var(--blanco); border:1px solid var(--linea); }
+  .boton.chico { padding:8px 14px; font-size:12.5px; }
+  .boton:disabled { opacity:.4; cursor:default; }
+
+  /* Panel */
+  .panel { background:var(--caja); border:1px solid var(--linea); border-radius:14px;
+           padding:18px; position:sticky; top:22px; }
+  .panel h2 { font-size:12px; text-transform:uppercase; letter-spacing:.09em;
+              color:var(--amarillo); margin:0 0 14px; font-weight:700; }
+  label { display:block; font-size:13px; margin:12px 0 5px; color:#C9C9D4; font-weight:400; }
+  select { width:100%; background:var(--negro); color:#fff; border:1px solid var(--linea);
+           border-radius:7px; padding:9px; font-size:13px; font-family:inherit; }
+  input[type=range] { width:100%; accent-color:var(--amarillo); }
+  input[type=range]:disabled { opacity:.35; }
+  label.apagado { opacity:.4; }
+
+  .colores { display:flex; flex-direction:column; gap:8px; }
+  .color { display:grid; grid-template-columns:18px 46px 40px 1fr; align-items:center; gap:9px; }
+  .color span { font-size:13px; color:#C9C9D4; }
+  .color input[type=checkbox] { accent-color:var(--amarillo); width:16px; height:16px;
+                                margin:0; cursor:pointer; }
+  .color input[type=color] { width:40px; height:32px; padding:2px; border:1px solid var(--linea);
+                             border-radius:7px; background:var(--negro); cursor:pointer; }
+  .color input[type=text] { background:var(--negro); color:#fff; border:1px solid var(--linea);
+                            border-radius:7px; padding:8px 10px; font-size:13px; width:100%;
+                            font-family:Consolas,monospace; text-transform:uppercase; }
+  .color input[type=text]:focus { outline:none; border-color:var(--amarillo); }
+  .color input[type=text].malo { border-color:var(--rojo); }
+  .color.activa span { color:var(--amarillo); font-weight:700; }
+  .color.apagada span, .color.apagada input[type=text] { opacity:.4; }
+  .color.apagada input[type=color] { opacity:.35; }
+  .paleta { display:flex; align-items:center; gap:7px; margin-top:11px; }
+  .paleta span { font-size:12px; color:var(--gris); margin-right:2px; }
+  .chip { width:24px; height:24px; border-radius:6px; border:1px solid var(--linea);
+          cursor:pointer; padding:0; }
+  .chip:hover { border-color:var(--amarillo); }
+  .check { display:flex; align-items:center; gap:9px; font-size:13px; margin:11px 0;
+           color:#C9C9D4; cursor:pointer; }
+  .check input { accent-color:var(--amarillo); width:16px; height:16px; }
+  #muestra { margin-top:14px; border-radius:8px; width:100%; display:block; background:#23232E; }
+  .nota-muestra { font-size:11.5px; color:var(--gris); margin:7px 0 0; }
+
+  footer { border-top:1px solid var(--linea); padding:14px 28px; font-size:12.5px;
+           color:var(--gris); display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+  footer a { color:var(--amarillo); text-decoration:none; font-weight:700; }
+  .aviso { background:#2A1E00; border:1px solid #5C4200; color:#FFD466; border-radius:9px;
+           padding:11px 14px; font-size:13px; margin-top:14px; display:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Editor de <span>reels</span></h1>
+  <p>Corta los silencios, pone los subtítulos y te deja borrar lo que sobra desde el texto. Tu video no sale de este computador.</p>
+</header>
+
+<main>
+  <section>
+    <div id="zona">
+      <div class="icono">🎬</div>
+      <div class="grande">Suelta aquí tu video</div>
+      <div class="chico">o haz clic para buscarlo · graba lo que necesites, el reel sale de 90 s</div>
+      <div class="chico" style="margin-top:8px;opacity:.75">La primera vez se trae el reconocimiento de voz. Después abre de una.</div>
+      <input type="file" id="archivo" accept="video/*">
+    </div>
+
+    <div id="estado">
+      <div id="paso">Preparando</div>
+      <div id="detalle"></div>
+      <div class="barra"><div id="avance"></div></div>
+    </div>
+
+    <div id="mesa">
+      <div class="lienzo"><canvas id="cuadro"></canvas></div>
+      <div class="mando">
+        <button class="redondo" id="tocar" title="Reproducir">▶</button>
+        <input type="range" id="momento" min="0" max="1000" value="0" step="1">
+        <span class="reloj"><b id="relojVa">0:00</b> / <span id="relojTotal">0:00</span></span>
+      </div>
+      <p class="pie">Esto es el resultado, no el original: ya va sin silencios, con los
+         subtítulos y a la velocidad elegida. Cambia lo que quieras y se ve al instante.</p>
+
+      <div class="texto-caja">
+        <h2>Lo que dices</h2>
+        <p class="ayuda">
+          <b>Un clic</b> en una palabra la saca del video. Otro clic la devuelve.
+          Para <b>corregir</b> una que quedó mal escrita, pasa el mouse por encima y
+          aprieta el <b>lápiz</b> que aparece al lado. Lo tachado no sale ni en el
+          video ni en los subtítulos.<br>
+          Las fichas <span class="ficha sonido">♪</span> son sonidos que no son palabras
+          (una muletilla cortada, un carraspeo) y las
+          <span class="ficha silencio">␣</span> son silencios, que ya vienen quitados.
+          También se quitan y se devuelven con un clic.
+        </p>
+        <div class="zona-texto">
+          <div id="transcripcion"></div>
+          <button id="lapiz" title="Corregir esta palabra">✎</button>
+        </div>
+        <div class="resumen">
+          <span>Queda: <b id="duraFinal">0 s</b></span>
+          <span>Fuera: <b id="duraFuera">0 s</b></span>
+          <span id="avisoRepetidas"></span>
+          <button class="boton gris chico" id="devolverTodo">Devolver todo</button>
+        </div>
+      </div>
+
+      <div class="acciones">
+        <button class="boton" id="editar">Exportar el video</button>
+        <button class="boton gris" id="cambiar">Cambiar video</button>
+      </div>
+    </div>
+
+    <div id="listo">
+      <video id="resultado" controls playsinline></video>
+      <div class="acciones">
+        <a class="boton" id="bajar" href="#" download="reel.mp4">Descargar el video</a>
+        <button class="boton gris" id="volver">Seguir ajustando</button>
+        <button class="boton gris" id="otro">Editar otro</button>
+      </div>
+    </div>
+
+    <div class="aviso" id="avisoNavegador"></div>
+  </section>
+
+  <aside class="panel">
+    <h2>Subtítulos</h2>
+    <label>Tipografía</label>
+    <select id="fuente">
+      <option value="Montserrat, sans-serif">Montserrat</option>
+      <option value="'Arial Black', sans-serif">Arial Black</option>
+      <option value="Impact, sans-serif">Impact</option>
+      <option value="Verdana, sans-serif">Verdana</option>
+      <option value="Georgia, serif">Georgia</option>
+    </select>
+
+    <label>Colores</label>
+    <div class="colores">
+      <div class="color">
+        <span></span>
+        <span>Letra</span>
+        <input type="color" id="colorLetra" value="#FFFFFF">
+        <input type="text" id="codigoLetra" value="#FFFFFF" maxlength="14" spellcheck="false">
+      </div>
+      <div class="color">
+        <input type="checkbox" id="usarBorde" checked title="Mostrar el borde de la letra">
+        <span>Borde</span>
+        <input type="color" id="colorBorde" value="#0F0F14">
+        <input type="text" id="codigoBorde" value="#0F0F14" maxlength="14" spellcheck="false">
+      </div>
+      <div class="color">
+        <input type="checkbox" id="usarFondo" checked title="Mostrar la caja de fondo">
+        <span>Fondo</span>
+        <input type="color" id="colorFondo" value="#F8B400">
+        <input type="text" id="codigoFondo" value="#F8B400" maxlength="14" spellcheck="false">
+      </div>
+    </div>
+    <div class="paleta">
+      <span>De la marca:</span>
+      <button type="button" class="chip" data-color="#F8B400" style="background:#F8B400" title="Amarillo #F8B400"></button>
+      <button type="button" class="chip" data-color="#0F0F14" style="background:#0F0F14" title="Negro #0F0F14"></button>
+      <button type="button" class="chip" data-color="#FFFFFF" style="background:#FFFFFF" title="Blanco #FFFFFF"></button>
+      <button type="button" class="chip" data-color="#21209C" style="background:#21209C" title="Azul #21209C"></button>
+    </div>
+
+    <label id="etiquetaTransp">Fondo visible: <span id="valorTransp">85%</span></label>
+    <input type="range" id="transparencia" min="0" max="100" step="5" value="85">
+
+    <label>Tamaño de letra: <span id="valorTamano">5</span></label>
+    <input type="range" id="tamano" min="3" max="10" step="1" value="5">
+
+    <label>Altura en pantalla: <span id="valorAltura">82%</span></label>
+    <input type="range" id="altura" min="6" max="94" step="2" value="82">
+
+    <canvas id="muestra" width="360" height="150"></canvas>
+    <p class="nota-muestra">Cuando subas tu video lo vas a ver sobre él.</p>
+
+    <h2 style="margin-top:22px">Edición</h2>
+    <label class="check"><input type="checkbox" id="cortar" checked> Quitar los silencios</label>
+    <label class="check"><input type="checkbox" id="repetidas" checked> Marcar las tomas donde te devolviste</label>
+    <label class="check"><input type="checkbox" id="muletillas" checked> Quitar muletillas del texto</label>
+    <label class="check"><input type="checkbox" id="emparejar" checked> Emparejar el volumen al exportar</label>
+    <label>Velocidad: <span id="valorVel">1.0x</span></label>
+    <input type="range" id="velocidad" min="100" max="150" step="5" value="100">
+  </aside>
+</main>
+
+<footer>
+  <span>Hecho por <strong>Joako Estratega</strong>. Nos la hicimos para nuestro proceso.</span>
+  <span>¿Necesitas una para el tuyo? <a href="https://wa.me/573028662556" target="_blank" rel="noopener">Escríbenos</a></span>
+</footer>
+
+<script type="module" src="editor.js"></script>
+</body>
+</html>
