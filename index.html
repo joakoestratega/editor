@@ -87,6 +87,12 @@
            color:var(--amarillo); font-size:13px; cursor:pointer; line-height:1;
            z-index:5; }
   #lapiz:hover { background:var(--amarillo); color:var(--negro); }
+  #clave { position:absolute; display:none; width:24px; height:24px; padding:0;
+           border-radius:6px; border:1px solid var(--amarillo); background:var(--negro);
+           color:var(--amarillo); font-size:12px; cursor:pointer; line-height:1; z-index:5; }
+  #clave:hover { background:var(--amarillo); color:var(--negro); }
+  .pal.clave { color:var(--amarillo); font-weight:700; text-decoration:underline;
+               text-decoration-thickness:2px; text-underline-offset:3px; }
   .resumen { font-size:12.5px; color:var(--gris); margin-top:12px;
              display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
   .resumen b { color:var(--blanco); font-weight:700; }
@@ -187,6 +193,7 @@
           Para <b>corregir</b> una que quedó mal escrita, pasa el mouse por encima y
           aprieta el <b>lápiz</b> que aparece al lado. Lo tachado no sale ni en el
           video ni en los subtítulos.<br>
+          Con la <b>estrella</b> marcas una <b>palabra clave</b>: sale en otro color en el video.
           Las fichas <span class="ficha sonido">♪</span> son sonidos que no son palabras
           (una muletilla cortada, un carraspeo) y las
           <span class="ficha silencio">␣</span> son silencios, que ya vienen quitados.
@@ -195,6 +202,7 @@
         <div class="zona-texto">
           <div id="transcripcion"></div>
           <button id="lapiz" title="Corregir esta palabra">✎</button>
+          <button id="clave" title="Marcar como palabra clave: sale en otro color">★</button>
         </div>
         <div class="resumen">
           <span>Queda: <b id="duraFinal">0 s</b></span>
@@ -224,6 +232,15 @@
 
   <aside class="panel">
     <h2>Subtítulos</h2>
+    <label>Estilo</label>
+    <select id="estiloListo">
+      <option value="caja">Caja amarilla</option>
+      <option value="karaoke">Karaoke (se pinta la que suena)</option>
+      <option value="resaltador">Resaltador (fondo en la que suena)</option>
+      <option value="limpio">Limpio (solo letra con borde)</option>
+      <option value="unaPalabra">Una palabra a la vez</option>
+    </select>
+
     <label>Tipografía</label>
     <select id="fuente">
       <option value="Montserrat, sans-serif">Montserrat</option>
@@ -253,6 +270,12 @@
         <input type="color" id="colorFondo" value="#F8B400">
         <input type="text" id="codigoFondo" value="#F8B400" maxlength="14" spellcheck="false">
       </div>
+      <div class="color">
+        <span></span>
+        <span>Clave</span>
+        <input type="color" id="colorDestacada" value="#0F0F14">
+        <input type="text" id="codigoDestacada" value="#0F0F14" maxlength="14" spellcheck="false">
+      </div>
     </div>
     <div class="paleta">
       <span>De la marca:</span>
@@ -275,6 +298,7 @@
     <p class="nota-muestra">Cuando subas tu video lo vas a ver sobre él.</p>
 
     <h2 style="margin-top:22px">Edición</h2>
+    <label class="check"><input type="checkbox" id="salto" checked> Que el subtítulo entre con un salto</label>
     <label class="check"><input type="checkbox" id="cortar" checked> Quitar los silencios</label>
     <label class="check"><input type="checkbox" id="repetidas" checked> Marcar las tomas donde te devolviste</label>
     <label class="check"><input type="checkbox" id="muletillas" checked> Quitar muletillas del texto</label>
