@@ -1,0 +1,13 @@
+[
+  { "id": "caja", "nombre": "Caja de color", "categoria": "Clásicos", "archivo": "caja.js", "fuentes": [], "destacada": true, "orden": 10 },
+  { "id": "karaoke", "nombre": "Karaoke", "categoria": "Clásicos", "archivo": "karaoke.js", "fuentes": [], "destacada": true, "orden": 20 },
+  { "id": "resaltador", "nombre": "Resaltador", "categoria": "Clásicos", "archivo": "resaltador.js", "fuentes": [], "destacada": false, "orden": 30 },
+  { "id": "limpio", "nombre": "Limpio", "categoria": "Clásicos", "archivo": "limpio.js", "fuentes": [], "destacada": false, "orden": 40 },
+  { "id": "unaPalabra", "nombre": "Una palabra", "categoria": "Clásicos", "archivo": "unaPalabra.js", "fuentes": [], "destacada": false, "orden": 50 },
+  { "id": "marco", "nombre": "Caja con marco", "categoria": "Llamativos", "archivo": "marco.js", "fuentes": ["montserrat.woff2"], "destacada": true, "orden": 60 },
+  { "id": "neon", "nombre": "Neón", "categoria": "Llamativos", "archivo": "neon.js", "fuentes": ["montserrat.woff2"], "destacada": true, "orden": 70 },
+  { "id": "oro", "nombre": "Oro brillante", "categoria": "Elegantes", "archivo": "oro.js", "fuentes": ["montserrat.woff2", "playfair-display-italic.woff2"], "destacada": true, "orden": 80 },
+  { "id": "firma", "nombre": "Firma", "categoria": "Elegantes", "archivo": "firma.js", "fuentes": ["montserrat.woff2", "great-vibes.woff2"], "destacada": true, "orden": 90 },
+  { "id": "desenfocado", "nombre": "Enfoque", "categoria": "Llamativos", "archivo": "desenfocado.js", "fuentes": ["montserrat.woff2", "yellowtail.woff2"], "destacada": true, "orden": 100 },
+  { "id": "maquina", "nombre": "Máquina de escribir", "categoria": "Llamativos", "archivo": "maquina.js", "fuentes": ["montserrat.woff2"], "destacada": true, "orden": 110 }
+]

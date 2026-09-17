@@ -1,0 +1,1 @@
+import{clasica as a}from"./_clasico.js";var r=a("caja",{karaoke:!1,fondoSoloPalabra:!1,unaPalabra:!1,usarFondo:!0,usarBorde:!0,transparencia:90,tamano:5,colorLetra:"#FFFFFF",colorBorde:"#0F0F14",colorFondo:"#F8B400",colorSonando:"#FFFFFF",colorDestacada:"#0F0F14"});export{r as default};

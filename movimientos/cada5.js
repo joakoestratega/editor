@@ -1,0 +1,1 @@
+import{bloquesCada as r}from"./bloques.js";var t={id:"cada5",nombre:"Cada 5 segundos",categoria:"Ritmo fijo",encuadreEn:r(5),saltosPedidos:o=>Array.from({length:Math.floor((o.duracion||0)/5)},(d,a)=>(a+1)*5)};export{t as default};

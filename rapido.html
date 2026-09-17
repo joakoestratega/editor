@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F7F5">
+<title>Quita los silencios de tu video · Joako Estratega</title>
+<meta name="description" content="Suelta tu video y en segundos te quitamos los silencios. Tu video no sale de tu celular.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Mismas variables que index.html: claro, video sobre negro, un solo acento */
+  :root{
+    --fondo:#F7F7F5; --barra:#FFFFFF; --hover:#FFF7DE; --supAc:#FFEFC2; --linea:#EAE7E0;
+    --tx:#17171A; --tx2:#55565B; --tx3:#83848A; --tx4:#AEAFB4;
+    --ac:#F8B400; --ac2:#0F0F14; --sobreAc:#0F0F14; --oro:#F8B400;
+    --escena:#0B0C0D; --borde2:#D8D4CB; --r:8px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  [hidden]{display:none !important}
+  html,body{min-height:100%}
+  body{background:var(--fondo);color:var(--tx);font-family:Montserrat,system-ui,sans-serif;
+       font-size:16px;font-weight:400;letter-spacing:-.011em;line-height:1.45;
+       display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;
+       -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+
+  header{background:var(--barra);border-bottom:1px solid var(--linea);height:52px;
+         display:flex;align-items:center;padding:0 18px;padding-top:env(safe-area-inset-top)}
+  .logo{font-weight:600;font-size:14px;letter-spacing:-.03em}
+  .logo b{color:var(--ac)}
+
+  main{flex:1;width:100%;max-width:520px;margin:0 auto;padding:28px 18px 32px;
+       display:flex;flex-direction:column}
+  section{display:flex;flex-direction:column;gap:18px}
+
+  h1{font-size:26px;font-weight:600;letter-spacing:-.035em;line-height:1.15}
+  .bajada{color:var(--tx2);font-size:15.5px}
+
+  .zona{border:1.5px dashed var(--borde2);border-radius:var(--r);background:var(--barra);
+        min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:14px;padding:28px 20px;text-align:center;cursor:pointer;user-select:none;
+        transition:background .12s,border-color .12s}
+  .zona:hover,.zona.encima{background:var(--hover);border-color:var(--ac)}
+  .zona.apagada{opacity:.45;pointer-events:none}
+  .zona small{color:var(--tx2);font-size:13px}
+
+  .btn{font-family:inherit;font-weight:700;font-size:19px;letter-spacing:-.015em;
+       min-height:54px;padding:15px 22px;border-radius:var(--r);border:1px solid transparent;
+       background:var(--ac);color:var(--sobreAc);cursor:pointer;text-decoration:none;
+       display:flex;align-items:center;justify-content:center;width:100%;
+       transition:transform .09s,filter .12s}
+  .btn:active{transform:scale(.98)}
+  .btn:hover{filter:brightness(1.06)}
+  .btn.suave{background:transparent;color:var(--tx);border-color:var(--borde2);font-weight:500}
+  .zona .btn{pointer-events:none;max-width:280px}
+
+  .nota{color:var(--tx2);font-size:13.5px;text-align:center}
+
+  .aviso{background:var(--supAc);border-left:2px solid var(--ac);color:#6B4A00;
+         border-radius:0 6px 6px 0;padding:12px 15px;font-size:14px;margin-bottom:18px}
+
+  /* trabajando */
+  .progreso{padding:40px 0 10px}
+  .progreso h2{font-size:21px;font-weight:600;letter-spacing:-.03em;margin-bottom:6px}
+  .progreso p{color:var(--tx2);font-size:14px}
+  .riel{height:6px;background:var(--linea);border-radius:3px;overflow:hidden;margin-top:26px}
+  .riel i{display:block;height:100%;width:0;background:var(--ac);transition:width .25s}
+  .cifra{font-size:13px;color:var(--tx2);margin-top:10px;font-variant-numeric:tabular-nums}
+
+  /* listo */
+  .cambio{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .cambio span{color:var(--tx2);font-size:15px}
+  .cambio b{font-size:34px;font-weight:600;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+  .cambio b.nuevo{color:var(--tx);box-shadow:inset 0 -10px 0 rgba(248,180,0,.6)}
+  .cambio b:not(.nuevo){color:var(--tx3);font-size:26px}
+  .ahorro{color:var(--tx2);font-size:14.5px;margin-top:-10px}
+  .escena{background:var(--escena);border-radius:var(--r);overflow:hidden;
+          display:flex;align-items:center;justify-content:center}
+  .escena video{display:block;width:100%;max-height:50vh;max-height:50dvh;background:var(--escena)}
+
+  .completo{color:var(--tx2);font-size:14px;text-align:center;padding-top:4px}
+  .completo a{color:var(--tx);font-weight:600;text-decoration:underline;text-decoration-color:var(--oro);text-decoration-thickness:2px;text-underline-offset:4px;display:inline-block;padding:12px 4px;min-height:44px}
+
+  footer{background:var(--barra);border-top:1px solid var(--linea);padding:14px 18px;
+         padding-bottom:calc(14px + env(safe-area-inset-bottom));
+         font-size:13px;color:var(--tx2);display:flex;flex-direction:column;gap:6px;text-align:center}
+  footer a{color:var(--tx);text-decoration:underline;text-decoration-color:var(--oro);text-decoration-thickness:2px;text-underline-offset:4px;font-weight:600;display:inline-block;padding:12px 4px;min-height:44px}
+  footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">JOAKO<b>·</b>EDITOR</div>
+</header>
+
+<main>
+  <div class="aviso" id="aviso" hidden></div>
+
+  <section id="inicio">
+    <h1>Quítale los silencios a tu video</h1>
+    <p class="bajada">Elige un video donde hables. En segundos te lo devolvemos sin pausas.</p>
+    <div class="zona" id="zona" role="button" tabindex="0">
+      <span class="btn">Elegir video</span>
+      <small>Hasta 5 minutos</small>
+    </div>
+    <p class="nota">Tu video no sale de tu celular.</p>
+    <input type="file" id="archivo" accept="video/*" hidden>
+  </section>
+
+  <section id="trabajando" hidden>
+    <div class="progreso">
+      <h2 id="paso">Quitando los silencios</h2>
+      <p>No cierres esta pestaña.</p>
+      <div class="riel"><i id="barra"></i></div>
+      <div class="cifra" id="porcentaje">0%</div>
+    </div>
+  </section>
+
+  <section id="listo" hidden>
+    <div class="cambio">
+      <span>de</span><b id="antes">0:00</b><span>a</span><b class="nuevo" id="despues">0:00</b>
+    </div>
+    <p class="ahorro" id="ahorro"></p>
+    <div class="escena">
+      <video id="resultado" controls playsinline preload="metadata"></video>
+    </div>
+    <a class="btn" id="bajar" href="#">Descargar</a>
+    <button class="btn suave" id="otro" type="button">Hacer otro</button>
+    <p class="completo">¿Y los subtítulos? <a href="./">Te los pone gratis el editor completo en el computador</a></p>
+  </section>
+
+  <section id="nada" hidden>
+    <div class="progreso">
+      <h2 id="nadaTitulo"></h2>
+      <p id="nadaTexto"></p>
+    </div>
+    <button class="btn" id="otroNada" type="button">Probar con otro video</button>
+  </section>
+</main>
+
+<footer>
+  <span>Hecho por <strong>Joako Estratega</strong>. Lo usamos en nuestros propios videos.</span>
+  <span>¿Tu negocio necesita una herramienta a su medida? <a href="https://wa.me/573028662556" target="_blank" rel="noopener">Escríbenos</a></span>
+</footer>
+
+<script type="module" src="./rapido.js"></script>
+</body>
+</html>

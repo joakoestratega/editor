@@ -22,12 +22,14 @@
   :root{
     --fondo:#F7F7F5;          /* el lienzo */
     --barra:#FFFFFF;          /* paneles */
-    --hover:#FBF3E2;          /* beige calido al pasar el mouse: el de la marca */
-    --supAc:#FDF0D9;          /* lo activo */
+    --hover:#FFF7DE;          /* beige calido al pasar el mouse: el de la marca */
+    --supAc:#FFEFC2;          /* lo activo */
     --linea:#EAE7E0;          /* las lineas que separan cada grupo */
     --tx:#17171A; --tx2:#55565B; --tx3:#83848A; --tx4:#AEAFB4;
-    --ac:#C27C00; --ac2:#A8481A; --sobreAc:#FFFFFF;
-    --acSuave:#FDF0D9; --acSombra:rgba(194,124,0,.22);
+    /* Dorado de Joako Estratega. Va de FONDO con letra negra: dorado sobre blanco no se lee. */
+    --ac:#F8B400; --ac2:#0F0F14; --sobreAc:#0F0F14; --oro:#F8B400;
+    --acSuave:#FFEFC2; --acSombra:rgba(248,180,0,.28);
+    --sup2:#83848A;           /* interruptor apagado: 3,73:1 contra blanco */
     --escena:#0B0C0D; --rojo:#C0392B;
     --r:6px; --rTarjeta:8px;
     --tarjeta:#FFFFFF; --lienzo:#F7F7F5;
@@ -47,11 +49,12 @@
          position:relative;z-index:10}
   .logo{font-weight:600;font-size:14px;letter-spacing:-.03em;white-space:nowrap}
   .logo b{color:var(--ac)}
-  .cifras{display:flex;align-items:center;gap:16px}
+  .cifras{display:none;align-items:center;gap:16px}
+  .cifras.visible{display:flex}
   .cif{display:flex;align-items:baseline;gap:6px}
   .cif s{font-size:11px;color:var(--tx3);text-decoration:none;font-weight:400;letter-spacing:0}
   .cif b{font-size:13px;font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
-  .cif.viva b{color:var(--ac)}
+  .cif.viva b{color:var(--tx);font-weight:600;box-shadow:inset 0 -5px 0 rgba(248,180,0,.55)}
   .fin{margin-left:auto;display:flex;align-items:center;gap:7px}
   .btn{font-family:inherit;font-weight:500;font-size:12.5px;letter-spacing:-.01em;
        cursor:pointer;padding:7px 15px;border:1px solid transparent;border-radius:6px;
@@ -76,15 +79,136 @@
   .panel::-webkit-scrollbar-thumb:hover,#transcripcion::-webkit-scrollbar-thumb:hover{
     background:var(--tx4)}
   #transcripcion::-webkit-scrollbar-thumb{border-color:var(--tarjeta)}
-  @media (max-width:1000px){ .cuerpo{grid-template-columns:1fr} }
+  /* En pantalla chica el panel y el video se apilan y la pagina baja con el dedo.
+     Con el alto fijo de computador, el video quedaba en una franja de pocos pixeles. */
+  @media (max-width:1000px){
+    .cuerpo{grid-template-columns:1fr}
+    body{height:auto;min-height:100vh;overflow:auto}
+    .cuerpo,.panel,.centro,#mesa{overflow:visible}
+    .panel{border-right:0;border-bottom:1px solid var(--linea)}
+    .lienzo{min-height:62vh}
+    .texto{max-height:none}
+  }
 
   /* El panel es el LIENZO, y cada bloque es una tarjeta que flota encima.
      Esa separacion por capas es lo que quita la sensacion de plano. */
   /* Sin cajas: cada grupo se separa con una linea y con espacio */
   .panel{background:var(--barra);border-right:1px solid var(--linea);
-         overflow-y:auto;padding:16px 10px 32px}
+         overflow-y:auto;padding:8px 10px 32px}
   .bloque{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--linea)}
   .bloque:last-child{border-bottom:0;padding-bottom:0}
+
+  /* ------------------------------------------- los grupos que se abren y cierran
+     Todo lo que el editor sabe hacer cabe en siete renglones. Antes estaba todo
+     desplegado a la vez y nadie sabia que existia la mitad. */
+  .grupo{border-bottom:1px solid var(--linea)}
+  .grupo:last-child{border-bottom:0}
+  .cabeza{display:flex;align-items:center;gap:8px;padding:11px 8px;cursor:pointer;
+          user-select:none;border-radius:6px;transition:background .1s}
+  .cabeza:hover{background:var(--hover)}
+  .flecha{color:var(--tx4);font-size:15px;line-height:1;width:10px;flex-shrink:0;
+          transition:transform .16s;display:inline-block}
+  .grupo.abierto .flecha{transform:rotate(90deg);color:var(--ac)}
+  .titulo{font-size:13px;font-weight:500;letter-spacing:-.01em;color:var(--tx2);flex:1}
+  .grupo.abierto .titulo{color:var(--tx)}
+
+  /* El interruptor de cada grupo: se prende sin abrirlo */
+  .palanca{position:relative;width:30px;height:17px;flex-shrink:0;cursor:pointer}
+  .palanca input{position:absolute;opacity:0;width:0;height:0}
+  .palanca span{position:absolute;inset:0;border-radius:9px;background:var(--sup2);
+                transition:background .15s}
+  .palanca span:after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;
+                      border-radius:50%;background:#FFF;transition:transform .15s;
+                      box-shadow:0 1px 2px rgba(0,0,0,.2)}
+  .palanca input:checked + span{background:var(--ac)}
+  .palanca input:checked + span:after{transform:translateX(13px)}
+  .palanca input:focus-visible + span{box-shadow:0 0 0 2px var(--acSuave)}
+
+  .dentro{display:none;padding:2px 0 14px}
+  .grupo.abierto .dentro{display:block}
+  /* Apagado el grupo, lo de adentro se ve pero no invita: esta ahi, no manda */
+  .grupo.apagado .dentro{opacity:.4;pointer-events:none}
+  .grupo.apagado .titulo{color:var(--tx3)}
+
+  /* Las plantillas de color y de movimiento */
+  .plantilla{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:6px;
+             cursor:pointer;transition:background .1s;margin-bottom:1px;color:var(--tx2);
+             font-size:13px}
+  .plantilla:hover{background:var(--hover);color:var(--tx)}
+  .plantilla.on{background:var(--supAc);color:var(--tx);box-shadow:inset 2px 0 0 var(--ac)}
+  .plantilla.on .nom{font-weight:500}
+  .tono{width:38px;height:22px;border-radius:4px;flex-shrink:0;
+        border:1px solid var(--linea);background-size:cover;background-position:center}
+
+  /* Lo que hacemos, sin asaltar a nadie: esta ahi para el que quiera abrirlo */
+  /* ------------------------------------------- lo que hacemos: tiene que resaltar
+     Tarjeta negra con el dorado de la marca, fija al pie del panel: se ve siempre,
+     sin abrir nada, y no se confunde con las herramientas del editor. */
+  .vitrina{position:sticky;bottom:0;display:block;width:100%;text-align:left;cursor:pointer;
+           margin:18px 0 0;padding:16px 48px 16px 16px;border:0;border-radius:10px;
+           background:#0F0F14;color:#F2F0EA;font-family:inherit;
+           box-shadow:inset 0 3px 0 var(--oro),0 -6px 10px 2px var(--barra);
+           transition:transform .12s}
+  .vitrina:hover{transform:translateY(-2px)}
+  .vitrina b{display:block;font-size:15px;font-weight:700;letter-spacing:-.02em;margin:3px 0 5px}
+  .vitrina span{display:block;font-size:12.5px;line-height:1.45;color:rgba(242,240,234,.78)}
+  .vitrina i{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-style:normal;
+             width:24px;height:24px;border-radius:50%;background:var(--oro);color:#0F0F14;
+             display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  .vitrinaSello{display:block;font-size:10px;font-weight:600;letter-spacing:.08em;
+                text-transform:uppercase;color:var(--oro);text-decoration:none}
+
+  .dialogo.oscuro{background:#0F0F14;color:#F2F0EA;border:1px solid #26262C;width:560px;
+                  position:relative;box-shadow:inset 0 3px 0 var(--oro),0 30px 70px rgba(0,0,0,.45)}
+  .dialogo.oscuro h4{font-size:22px;font-weight:700;letter-spacing:-.03em;margin:6px 0 6px;color:#FFF}
+  .dialogo.oscuro p{color:rgba(242,240,234,.75);font-size:14px;margin-bottom:18px}
+  .cerrarVitrina{position:absolute;top:12px;right:14px;background:transparent;border:0;
+                 color:rgba(242,240,234,.6);font-size:24px;cursor:pointer;line-height:1}
+  .cerrarVitrina:hover{color:#FFF}
+  .dialogo.oscuro .servicio{display:block;padding:13px 14px;margin-bottom:8px;border-radius:8px;
+    background:#1C1C23;border:1px solid #3A3A42;text-decoration:none;transition:border-color .12s,background .12s}
+  .dialogo.oscuro .servicio:hover{border-color:var(--oro);background:#1C1B16}
+  .dialogo.oscuro .servicio b{display:block;font-size:14.5px;font-weight:600;color:#FFF;letter-spacing:-.015em}
+  .dialogo.oscuro .servicio s{display:block;font-size:12.5px;color:rgba(242,240,234,.7);
+    text-decoration:none;margin-top:3px;line-height:1.45}
+  .btnOro{display:block;text-align:center;margin-top:14px;padding:13px;border-radius:8px;
+          background:var(--oro);color:#0F0F14;font-weight:700;font-size:15px;text-decoration:none;
+          transition:filter .12s}
+  .btnOro:hover{filter:brightness(1.06)}
+
+  /* La barra de arriba: frase y un boton que SI parece boton */
+  .mensajeArriba{display:flex;align-items:center;gap:12px;min-width:0}
+  /* La frase puede ir en dos renglones: con el video cargado la barra se llena y en
+     uno solo se cortaba la palabra que importa */
+  .fraseArriba{font-size:12.5px;color:var(--tx2);line-height:1.3;max-width:330px;overflow:hidden;
+               display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .cif,.fin .btn{white-space:nowrap}
+  .btnIdea{flex-shrink:0;background:var(--oro);color:#0F0F14;border:0;border-radius:6px;
+           min-height:36px;padding:8px 16px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+           transition:filter .12s,transform .09s}
+  .btnIdea:hover{filter:brightness(1.06)}
+  .btnIdea:active{transform:scale(.97)}
+  @media (max-width:1100px){ .fraseArriba{display:none} }
+  @media (max-width:1000px){ .btnIdea{min-height:44px} }
+  @media (max-width:640px){
+    header{flex-wrap:wrap;height:auto;padding:8px 12px;row-gap:8px}
+    .cifras.visible{display:none}
+    #avisoRepetidas{display:none}
+    .fin .btn{min-height:44px}
+    .mensajeArriba{order:3;flex-basis:100%}
+    .btnIdea{flex:1;padding:8px 10px;font-size:12.5px}
+    .vitrina{position:relative}
+  }
+
+  .servicio{display:block;padding:8px;border-radius:6px;color:var(--tx2);
+            text-decoration:none;transition:background .1s;margin-bottom:1px}
+  .servicio:hover{background:var(--hover);color:var(--tx)}
+  .servicio b{display:block;font-size:12.5px;font-weight:500;letter-spacing:-.01em}
+  .servicio s{display:block;font-size:11px;color:var(--tx3);text-decoration:none;
+              line-height:1.45;margin-top:1px}
+  .servicio:hover s{color:var(--tx2)}
+  .dentro .ctl{padding:0 8px;margin-bottom:13px}
+  .dentro > #listaEstilos{margin-bottom:12px}
   .bloque h3{font-size:11px;font-weight:500;color:var(--tx2);letter-spacing:-.005em;
              margin:0 8px 9px;display:flex;align-items:center;gap:7px}
   /* Una linea corta de acento delante del titulo: dice donde empieza cada cosa */
@@ -123,6 +247,56 @@
         background:var(--escena);color:#EFEDEA;border:1px solid var(--linea)}
   .e .nom{font-size:13px;display:block;line-height:1.3;font-weight:400}
   .e .que{display:none}       /* va en el titulo emergente, no ocupando la pantalla */
+
+  /* Plantillas: fichas con su vista previa. En el panel solo las destacadas;
+     las demas en la ventana, por categoria. Con 100 el panel se ve igual. */
+  #listaEstilos,#listaMovimiento{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 6px}
+  .pl{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:4px;
+      padding:4px;border:1px solid var(--linea);border-radius:7px;background:var(--barra);
+      cursor:pointer;font-family:inherit;color:var(--tx2);text-align:left;min-width:0;
+      transition:background .1s,border-color .1s}
+  .pl:hover{background:var(--hover);color:var(--tx);border-color:var(--borde2)}
+  .pl:focus-visible{outline:none;box-shadow:0 0 0 2px var(--ac)}
+  .pl.on{background:var(--ac);border-color:var(--ac);color:var(--sobreAc)}
+  .pl canvas{width:100%;aspect-ratio:152/120;border-radius:4px;display:block;background:#1B1B22}
+  .pl .aa{position:absolute;left:4px;right:4px;top:4px;aspect-ratio:152/120;display:flex;
+          align-items:center;justify-content:center;color:#EFEDEA;font-weight:700;font-size:15px;
+          pointer-events:none}
+  .pl.cargada .aa{display:none}
+  .pl .nom{font-size:11px;line-height:1.25;font-weight:500;height:2.5em;overflow:hidden;letter-spacing:-.01em;
+           display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .pl.on .nom{font-weight:600}
+  .pl.verMas{justify-content:space-between;background:var(--f2)}
+  .pl.verMas b{flex:1;display:flex;align-items:center;justify-content:center;aspect-ratio:152/120;
+               font-size:17px;font-weight:600;color:var(--tx);border-radius:4px;
+               border:1px dashed var(--borde2)}
+  .pl.verMas:hover b{border-color:var(--ac)}
+  #listaEstilos + .check{margin-top:8px}
+  .noAplica{opacity:.35;pointer-events:none}
+
+  .dialogo.plantillas{width:640px;position:relative;padding:22px 22px 18px}
+  .dialogo.plantillas h4{margin-bottom:12px}
+  .cerrarVentana{position:absolute;top:12px;right:12px;width:32px;height:32px;border:0;
+                 background:transparent;font-size:22px;line-height:1;color:var(--tx3);cursor:pointer;
+                 border-radius:6px}
+  .cerrarVentana:hover{background:var(--hover);color:var(--tx)}
+  .filtros{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .filtro{font-family:inherit;font-size:12px;font-weight:500;padding:6px 12px;border-radius:14px;
+          border:1px solid var(--borde2);background:var(--barra);color:var(--tx2);cursor:pointer}
+  .filtro:hover{background:var(--hover);color:var(--tx)}
+  .filtro.on{background:var(--ac);border-color:var(--ac);color:var(--sobreAc)}
+  .cuerpoPlantillas{max-height:62vh;overflow-y:auto;padding-right:4px}
+  .cuerpoPlantillas section{margin-bottom:16px}
+  .cuerpoPlantillas h5{font-size:11px;font-weight:600;color:var(--tx2);margin:0 0 8px;
+                       display:flex;align-items:center;gap:7px}
+  .cuerpoPlantillas h5:before{content:'';width:14px;height:2px;background:var(--ac);border-radius:1px}
+  .rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+  @media (max-width:640px){
+    .dialogo.plantillas{padding:18px 14px 14px}
+    .rejilla{grid-template-columns:repeat(3,1fr);gap:6px}
+    .cerrarVentana{width:44px;height:44px;top:6px;right:6px}
+    .filtro{min-height:44px;padding:0 14px}
+  }
 
   /* Deslizadores */
   .ctl{padding:0 8px;margin-bottom:16px}
@@ -165,21 +339,39 @@
   #muestra{margin:12px 8px 0;border-radius:var(--r);width:calc(100% - 16px);display:block}
 
   /* --------------------------------------------------------------- centro */
-  .centro{display:flex;flex-direction:column;overflow:hidden;background:var(--fondo)}
+  /* El centro es la escena, y la escena va oscura desde que se abre. Dejarla
+     blanca hasta que entre el video hacia que la pagina arrancara toda blanca. */
+  .centro{display:flex;flex-direction:column;overflow:hidden;background:var(--escena)}
 
   /* Entrada */
-  #zona{margin:auto;max-width:600px;width:100%;text-align:center;padding:72px 40px;
-        background:var(--barra);border:1px dashed var(--borde2);border-radius:10px;
-        cursor:pointer;transition:.15s}
-  #zona:hover,#zona.encima{border-color:var(--ac);background:var(--hover)}
+  /* La zona y la barra de descarga van JUNTAS y centradas: el sobrante se
+     reparte arriba de una y debajo de la otra. */
+  #zona{margin:auto auto 0;max-width:600px;width:100%;text-align:center;padding:72px 40px;
+        background:rgba(255,255,255,.035);border:1px dashed rgba(255,255,255,.2);
+        border-radius:12px;cursor:pointer;transition:.15s;color:#EFEDEA}
+  #zona:hover,#zona.encima{border-color:var(--ac);background:rgba(248,180,0,.10)}
+  #zona .chico{color:rgba(239,237,234,.58)}
   #zona .icono{font-size:44px;line-height:1}
   #zona .grande{font-size:21px;font-weight:600;margin:16px 0 8px;letter-spacing:-.03em}
-  #zona .chico{font-size:13.5px;color:var(--tx3);line-height:1.7}
+  #zona .chico{font-size:13.5px;line-height:1.7}
   #archivo{display:none}
+
+  /* Lo que se baja la primera vez, a la vista y mientras la persona busca su
+     video. Son los mismos megas; lo que cambia es que no se esperan mirando. */
+  body.conVideo #avanceModelo{display:none!important}
+  #avanceModelo{display:none;margin:16px auto auto;max-width:600px;width:100%;
+                padding:0 8px;text-align:center}
+  #avanceModelo b{display:block;font-size:12px;font-weight:400;
+                  color:rgba(239,237,234,.62);margin-bottom:8px;line-height:1.5}
+  #avanceModelo .riel{height:3px;background:rgba(255,255,255,.12);border-radius:2px;
+                      overflow:hidden}
+  #avanceModelo .riel i{display:block;height:100%;width:0;background:var(--ac);
+                        border-radius:2px;transition:width .3s}
 
   /* Trabajando */
   #estado{display:none;margin:auto;max-width:540px;width:100%;background:var(--barra);
-          border:1px solid var(--linea);border-radius:10px;padding:28px}
+          border:1px solid var(--linea);border-radius:10px;padding:28px;
+          box-shadow:0 18px 48px rgba(0,0,0,.4)}
   #paso{font-size:16px;font-weight:500;letter-spacing:-.02em}
   #detalle{font-size:13px;color:var(--tx3);margin-top:6px;min-height:19px;line-height:1.5}
   .progreso{height:5px;background:var(--f3);border-radius:3px;margin-top:18px;overflow:hidden}
@@ -217,17 +409,20 @@
   .pal{padding:3px 4px;border-radius:3px;cursor:pointer;transition:background .1s}
   .pal:hover{background:var(--hover)}
   .pal.fuera{color:var(--tx4);text-decoration:line-through;text-decoration-thickness:2px}
-  .pal.tocada{color:var(--ac2);font-weight:600}
-  .pal.clave{color:var(--ac2);font-weight:700;box-shadow:inset 0 -2px 0 var(--ac2)}
+  .pal.tocada{color:var(--tx);font-weight:600;text-decoration:underline dotted var(--oro) 2px;text-underline-offset:4px}
+  .pal.clave{color:#0F0F14;font-weight:800;font-size:18px;background:#FFE7A3;
+             box-shadow:inset 0 -3px 0 var(--ac);padding:3px 6px}
+  .pal.clave:before{content:'\2605';font-size:11px;margin-right:4px;vertical-align:2px}
+  .pal.clave.fuera{background:transparent;box-shadow:none;color:var(--tx4)}
   .pal.sonando{background:var(--ac);color:var(--sobreAc);font-weight:500}
   .pal.editando{background:var(--f3);outline:1px solid var(--ac)}
   .ficha{font-size:10.5px;padding:2px 7px;border-radius:9px;background:var(--f2);
          color:var(--tx3);vertical-align:middle;font-variant-numeric:tabular-nums}
-  .ficha.sonido{background:var(--acSuave);color:var(--ac2)}
+  .ficha.sonido{background:var(--acSuave);color:var(--tx2)}
   .ficha.fuera{text-decoration:none;opacity:.5}
   #lapiz,#clave{position:absolute;display:none;width:24px;height:20px;padding:0;
-                border-radius:5px;border:1px solid var(--ac);background:var(--f1);
-                color:var(--ac);font-size:12px;cursor:pointer;line-height:1;z-index:5}
+                border-radius:5px;border:1px solid #D8D4CB;background:var(--f1);
+                color:#0F0F14;font-size:12px;cursor:pointer;line-height:1;z-index:5}
   #lapiz:hover,#clave:hover{background:var(--ac);color:var(--sobreAc)}
   .resumen{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:12px;
            font-size:12.5px;color:var(--tx3);flex-shrink:0}
@@ -235,23 +430,25 @@
 
   /* Resultado */
   #listo{display:none;flex-direction:column;overflow:auto;padding:20px;height:100%;
-         background:var(--fondo)}
+         background:var(--escena);color:#EFEDEA}
   #resultado{width:100%;max-height:62vh;border-radius:6px;background:#000;display:block}
   .acciones{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 
   .aviso{background:var(--supAc);border-left:2px solid var(--ac);color:#6B4A00;
+         margin:14px 14px 0;border-radius:0 4px 4px 0;
          padding:11px 15px;font-size:12.5px;display:none;line-height:1.55}
 
   footer{background:var(--barra);border-top:1px solid var(--linea);padding:11px 20px;
          font-size:12.5px;color:var(--tx3);display:flex;justify-content:space-between;
          gap:14px;flex-wrap:wrap;flex-shrink:0}
-  footer a{color:var(--ac2);text-decoration:none;font-weight:500}
+  footer a{color:var(--tx);font-weight:600;text-decoration:underline;text-decoration-color:var(--oro);text-decoration-thickness:2px;text-underline-offset:4px}
   footer a:hover{text-decoration:underline}
 
   /* Diálogo para ponerle nombre a la configuración */
   .velo{position:fixed;inset:0;background:rgba(24,22,18,.34);display:none;
         align-items:center;justify-content:center;z-index:50}
-  .velo.abierto{display:flex}
+  .velo.abierto{display:flex;overflow-y:auto;align-items:flex-start;padding:12px 0}
+  .velo.abierto > .dialogo{margin:auto}
   .dialogo{background:var(--barra);border:1px solid var(--linea);border-radius:12px;
            padding:26px;width:390px;max-width:92vw;
            box-shadow:0 20px 50px rgba(24,22,18,.18)}
@@ -260,21 +457,50 @@
   .dialogo input{width:100%;background:var(--f2);border:1px solid var(--borde);
                  border-radius:var(--r);padding:11px 12px;font-family:inherit;font-size:14px;
                  color:var(--tx)}
-  .dialogo input:focus{outline:none;border-color:var(--ac)}
+  .dialogo input:focus{outline:none;border-color:#0F0F14;box-shadow:0 0 0 3px rgba(248,180,0,.45)}
   .dialogo .acciones{justify-content:flex-end}
+
+  /* ------------------------------------- el cartel de "esto todavia se esta haciendo"
+     Va en la barra, no encima de la pantalla: se ve siempre y no estorba nunca. */
+
+  .dialogo.ancho{width:520px}
+  .campo{margin-bottom:13px}
+  .campo label{display:block;font-size:12px;font-weight:500;color:var(--tx2);margin-bottom:5px}
+  .campo label s{text-decoration:none;font-weight:400;color:var(--tx4);font-size:11px}
+  .campo textarea,.campo input[type=text]{width:100%;background:var(--barra);
+    border:1px solid var(--borde2);border-radius:6px;padding:9px 11px;font-family:inherit;
+    font-size:13px;color:var(--tx);resize:vertical;line-height:1.5}
+  .campo textarea:focus,.campo input[type=text]:focus{outline:none;border-color:#0F0F14;box-shadow:0 0 0 3px rgba(248,180,0,.45)}
+  .campo input[type=file]{font-family:inherit;font-size:12px;color:var(--tx3);width:100%}
+  .campo s.nota{display:block;font-size:11px;color:var(--tx4);margin-top:5px;line-height:1.45;
+                text-decoration:none}
+  .dosCampos{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .nota.legal{display:block;font-size:10.5px;color:var(--tx4);line-height:1.5;margin:2px 0 12px;
+              text-decoration:none}
+  .nota.legal a{color:var(--tx3)}
+  .archivos{font-size:11.5px;color:var(--tx3);margin-top:6px;line-height:1.6}
+  .archivos b{color:var(--tx2);font-weight:500}
+  .avisoIdea{font-size:12.5px;line-height:1.5;margin:4px 0 12px;display:none;
+             padding:9px 11px;border-radius:6px}
+  .avisoIdea.malo{display:block;background:#FDECEA;color:#8C2F24}
+  .avisoIdea.bien{display:block;background:var(--supAc);color:#6B4A00}
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">JOAKO<b>·</b>EDITOR</div>
-  <div class="cifras" id="cifras" style="display:none">
+  <div class="cifras" id="cifras">
     <div class="cif"><s>Grabado</s><b id="cifGrabado">0:00</b></div>
     <div class="cif viva"><s>Queda</s><b id="duraFinal">0 s</b></div>
     <div class="cif"><s>Fuera</s><b id="duraFuera">0 s</b></div>
   </div>
+  <div class="mensajeArriba">
+    <span class="fraseArriba">Estamos creando el mejor editor de video automático, gratis y sin marca de agua.</span>
+    <button class="btnIdea" id="abrirIdea">¿Qué le agregamos?</button>
+  </div>
   <div class="fin">
-    <span id="avisoRepetidas" style="font-size:12px;color:var(--ac2)"></span>
+    <span id="avisoRepetidas" style="font-size:12px;color:var(--tx2)"></span>
     <button class="btn suave" id="cambiar" style="display:none">Cambiar video</button>
     <button class="btn" id="editar" style="display:none">Exportar</button>
   </div>
@@ -283,119 +509,189 @@
 <div class="cuerpo">
   <aside class="panel">
 
-    <div class="bloque">
-      <h3>Mis configuraciones</h3>
-      <p class="pie">Guarda tus colores y tu estilo con un nombre. Ten uno por marca o por cliente y cambia con un clic.</p>
-      <div id="listaConfigs"></div>
-      <button class="nueva" id="guardarConfig">Guardar colores y estilo</button>
-    </div>
-
-    <div class="bloque">
-      <h3>Estilo del subtítulo</h3>
-      <div id="listaEstilos"></div>
-    </div>
-
-    <div class="bloque">
-      <h3>Letra y color</h3>
-      <div class="ctl">
-        <label for="fuente">Tipografía</label>
-        <select id="fuente">
-          <option value="Montserrat, sans-serif">Montserrat</option>
-          <option value="'Arial Black', sans-serif">Arial Black</option>
-          <option value="Impact, sans-serif">Impact</option>
-          <option value="Verdana, sans-serif">Verdana</option>
-          <option value="Georgia, serif">Georgia</option>
-        </select>
+    <div class="grupo" data-grupo="configs">
+      <div class="cabeza"><span class="flecha">›</span><span class="titulo">Mis configuraciones</span></div>
+      <div class="dentro">
+        <div id="listaConfigs"></div>
+        <button class="nueva" id="guardarConfig">Guardar todo con un nombre</button>
       </div>
+    </div>
 
-      <div class="colores">
-        <div class="color">
-          <span></span>
-          <span class="nom">Letra</span>
-          <input type="color" id="colorLetra" value="#FFFFFF">
-          <input type="text" id="codigoLetra" value="#FFFFFF" maxlength="14" spellcheck="false">
+    <div class="grupo" data-grupo="subtitulos">
+      <div class="cabeza">
+        <span class="flecha">›</span><span class="titulo">Subtítulos</span>
+        <label class="palanca" title="Poner o quitar los subtítulos">
+          <input type="checkbox" id="usarSubtitulos" checked><span></span></label>
+      </div>
+      <div class="dentro">
+        <div id="listaEstilos"></div>
+        <label class="check" title="Resalta solas las palabras que más pesan. Con la estrella cambias las que quieras.">
+          <input type="checkbox" id="clavesSolas" checked>
+          <span><span class="nom">Elegir palabras clave solas</span></span></label>
+
+        <div class="ctl" data-control="fuente">
+          <label for="fuente">Tipografía</label>
+          <select id="fuente">
+            <option value="Montserrat, sans-serif">Montserrat</option>
+            <option value="&#39;Arial Black&#39;, sans-serif">Arial Black</option>
+            <option value="Impact, sans-serif">Impact</option>
+            <option value="Verdana, sans-serif">Verdana</option>
+            <option value="Georgia, serif">Georgia</option>
+          </select>
         </div>
-        <div class="color">
-          <input type="checkbox" id="usarBorde" checked title="Mostrar el contorno de la letra">
-          <span class="nom">Borde</span>
-          <input type="color" id="colorBorde" value="#0F0F14">
-          <input type="text" id="codigoBorde" value="#0F0F14" maxlength="14" spellcheck="false">
-        </div>
-        <div class="color">
-          <input type="checkbox" id="usarFondo" checked title="Mostrar la caja detrás del texto">
-          <span class="nom">Fondo</span>
-          <input type="color" id="colorFondo" value="#F8B400">
-          <input type="text" id="codigoFondo" value="#F8B400" maxlength="14" spellcheck="false">
-        </div>
-        <div class="color">
-          <span></span>
-          <span class="nom">Clave</span>
-          <input type="color" id="colorDestacada" value="#0F0F14">
-          <input type="text" id="codigoDestacada" value="#0F0F14" maxlength="14" spellcheck="false">
-        </div>
-      </div>
-      <div class="paleta">
-        <s>De tu marca:</s>
-        <button type="button" class="chip" data-color="#F8B400" style="background:#F8B400" title="Amarillo #F8B400"></button>
-        <button type="button" class="chip" data-color="#0F0F14" style="background:#0F0F14" title="Negro #0F0F14"></button>
-        <button type="button" class="chip" data-color="#FFFFFF" style="background:#FFFFFF" title="Blanco #FFFFFF"></button>
-        <button type="button" class="chip" data-color="#21209C" style="background:#21209C" title="Azul #21209C"></button>
-      </div>
 
-      <canvas id="muestra" width="360" height="130"></canvas>
+        <div class="colores">
+          <div class="color" data-control="letra">
+            <span></span>
+            <span class="nom">Letra</span>
+            <input type="color" id="colorLetra" value="#FFFFFF">
+            <input type="text" id="codigoLetra" value="#FFFFFF" maxlength="14" spellcheck="false">
+          </div>
+          <div class="color" data-control="borde">
+            <input type="checkbox" id="usarBorde" checked title="Mostrar el contorno de la letra">
+            <span class="nom">Borde</span>
+            <input type="color" id="colorBorde" value="#0F0F14">
+            <input type="text" id="codigoBorde" value="#0F0F14" maxlength="14" spellcheck="false">
+          </div>
+          <div class="color" data-control="fondo">
+            <input type="checkbox" id="usarFondo" checked title="Mostrar la caja detrás del texto">
+            <span class="nom">Fondo</span>
+            <input type="color" id="colorFondo" value="#F8B400">
+            <input type="text" id="codigoFondo" value="#F8B400" maxlength="14" spellcheck="false">
+          </div>
+          <div class="color" data-control="clave">
+            <span></span>
+            <span class="nom">Clave</span>
+            <input type="color" id="colorDestacada" value="#0F0F14">
+            <input type="text" id="codigoDestacada" value="#0F0F14" maxlength="14" spellcheck="false">
+          </div>
+        </div>
+        <div class="paleta">
+          <s>De tu marca:</s>
+          <button type="button" class="chip" data-color="#F8B400" style="background:#F8B400" title="Amarillo #F8B400"></button>
+          <button type="button" class="chip" data-color="#0F0F14" style="background:#0F0F14" title="Negro #0F0F14"></button>
+          <button type="button" class="chip" data-color="#FFFFFF" style="background:#FFFFFF" title="Blanco #FFFFFF"></button>
+          <button type="button" class="chip" data-color="#21209C" style="background:#21209C" title="Azul #21209C"></button>
+        </div>
+
+        <canvas id="muestra" width="360" height="130"></canvas>
+
+        <div class="ctl" data-control="tamano">
+          <label>Tamaño de letra <b id="valorTamano">5</b></label>
+          <input type="range" id="tamano" min="3" max="10" step="1" value="5">
+        </div>
+        <div class="ctl" data-control="altura">
+          <label>Altura en pantalla <b id="valorAltura">82%</b></label>
+          <input type="range" id="altura" min="6" max="94" step="2" value="82">
+        </div>
+        <div class="ctl" id="etiquetaTransp" data-control="transparencia">
+          <label>Fondo visible <b id="valorTransp">85%</b></label>
+          <input type="range" id="transparencia" min="0" max="100" step="5" value="85">
+        </div>
+        <label class="check" data-control="salto" title="El subtítulo aparece creciendo, no pegado">
+          <input type="checkbox" id="salto" checked>
+          <span><span class="nom">Entrada con salto</span></span></label>
+      </div>
     </div>
 
-    <div class="bloque">
-      <h3>Tamaño y lugar</h3>
-      <div class="ctl">
-        <label>Tamaño de letra <b id="valorTamano">5</b></label>
-        <input type="range" id="tamano" min="3" max="10" step="1" value="5">
+    <div class="grupo" data-grupo="corte">
+      <div class="cabeza">
+        <span class="flecha">›</span><span class="titulo">Corte automático</span>
+        <label class="palanca" title="Cortar solo lo que sobra">
+          <input type="checkbox" id="usarCorte" checked><span></span></label>
       </div>
-      <div class="ctl">
-        <label>Altura en pantalla <b id="valorAltura">82%</b></label>
-        <input type="range" id="altura" min="6" max="94" step="2" value="82">
-      </div>
-      <div class="ctl" id="etiquetaTransp">
-        <label>Fondo visible <b id="valorTransp">85%</b></label>
-        <input type="range" id="transparencia" min="0" max="100" step="5" value="85">
+      <div class="dentro">
+        <label class="check" title="Mide el audio y corta donde nadie habla">
+          <input type="checkbox" id="cortar" checked>
+          <span><span class="nom">Quitar los silencios</span></span></label>
+        <label class="check" title="Cuando te equivocas y vuelves a empezar la frase">
+          <input type="checkbox" id="repetidas" checked>
+          <span><span class="nom">Quitar tomas repetidas</span></span></label>
+        <label class="check" title="Los eh, mm y o sea salen del video y del subtítulo">
+          <input type="checkbox" id="muletillas" checked>
+          <span><span class="nom">Quitar muletillas</span></span></label>
+        <div class="ctl" style="margin-top:12px">
+          <label for="oido">Qué tan bien te oye</label>
+          <select id="oido">
+            <option value="preciso">Preciso · acierta más, trae 932 MB la primera vez</option>
+            <option value="rapido">Rápido · trae 286 MB, se le escapan más palabras</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <div class="bloque">
-      <h3>Edición</h3>
-      <label class="check" title="Mide el audio y corta donde nadie habla"><input type="checkbox" id="cortar" checked>
-        <span><span class="nom">Quitar los silencios</span>
-        <span class="que">Mide el audio y corta donde nadie habla</span></span></label>
-      <label class="check" title="Cuando te equivocas y vuelves a empezar la frase"><input type="checkbox" id="repetidas" checked>
-        <span><span class="nom">Marcar tomas repetidas</span>
-        <span class="que">Cuando te equivocas y vuelves a empezar la frase</span></span></label>
-      <label class="check" title="Los eh, mm y o sea no salen en el subtitulo"><input type="checkbox" id="muletillas" checked>
-        <span><span class="nom">Quitar muletillas del texto</span>
-        <span class="que">Los "eh", "mm" y "o sea" no salen en el subtítulo</span></span></label>
-      <label class="check" title="El subtitulo aparece creciendo, no pegado"><input type="checkbox" id="salto" checked>
-        <span><span class="nom">Entrada con salto</span>
-        <span class="que">El subtítulo aparece creciendo, no pegado</span></span></label>
-      <label class="check" title="Sube la voz al nivel que usan las redes"><input type="checkbox" id="emparejar" checked>
-        <span><span class="nom">Emparejar el volumen</span>
-        <span class="que">Sube la voz al nivel que usan las redes</span></span></label>
-      <div class="ctl" style="margin-top:14px">
-        <label>Velocidad <b id="valorVel">1.0x</b></label>
-        <input type="range" id="velocidad" min="100" max="150" step="5" value="100">
+    <div class="grupo" data-grupo="color">
+      <div class="cabeza">
+        <span class="flecha">›</span><span class="titulo">Color</span>
+        <label class="palanca" title="Corregir el color de la imagen">
+          <input type="checkbox" id="usarColor"><span></span></label>
+      </div>
+      <div class="dentro">
+        <div id="listaColor"></div>
+        <div class="ctl" style="margin-top:12px">
+          <label>Fuerza <b id="valorFuerzaColor">100%</b></label>
+          <input type="range" id="fuerzaColor" min="20" max="140" step="10" value="100">
+        </div>
       </div>
     </div>
+
+    <div class="grupo" data-grupo="movimiento">
+      <div class="cabeza">
+        <span class="flecha">›</span><span class="titulo">Movimiento</span>
+        <label class="palanca" title="Acercar y alejar la cámara solo">
+          <input type="checkbox" id="usarMovimiento" checked><span></span></label>
+      </div>
+      <div class="dentro">
+        <div id="listaMovimiento"></div>
+        <div class="ctl" style="margin-top:12px">
+          <label><span id="nombreAjusteMov">Qué tan cerca</span> <b id="valorZoom">1.85x</b></label>
+          <input type="range" id="fuerzaZoom" min="1.3" max="2" step="0.05" value="1.85">
+        </div>
+      </div>
+    </div>
+
+    <div class="grupo" data-grupo="ritmo">
+      <div class="cabeza">
+        <span class="flecha">›</span><span class="titulo">Velocidad y volumen</span>
+      </div>
+      <div class="dentro">
+        <div class="ctl">
+          <label>Velocidad <b id="valorVel">1.0x</b></label>
+          <input type="range" id="velocidad" min="100" max="150" step="5" value="100">
+        </div>
+        <label class="check" title="Sube la voz al nivel que usan las redes">
+          <input type="checkbox" id="emparejar" checked>
+          <span><span class="nom">Emparejar el volumen</span></span></label>
+      </div>
+    </div>
+
+    <button class="vitrina" id="abrirVitrina" type="button">
+      <s class="vitrinaSello">Joako Estratega</s>
+      <b>Te hacemos la tuya</b>
+      <span>Una fábrica de software hace lo que le pidas. Nosotros te decimos qué pedir.</span>
+      <i aria-hidden="true">→</i>
+    </button>
+
   </aside>
 
   <main class="centro">
     <div class="aviso" id="avisoNavegador"></div>
 
     <div id="zona">
-      <div class="icono">🎬</div>
+      <div class="icono"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#F8B400"
+        stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5l5-3v9l-5-3"/></svg></div>
       <div class="grande">Suelta aquí tu video</div>
       <div class="chico">
         o haz clic para buscarlo · graba lo que necesites, el reel sale de 90 s<br>
         <span style="opacity:.75">La primera vez se trae el reconocimiento de voz. Después abre de una.</span>
       </div>
       <input type="file" id="archivo" accept="video/*">
+    </div>
+
+    <div id="avanceModelo">
+      <b>Trayendo el reconocimiento de voz</b>
+      <div class="riel"><i></i></div>
     </div>
 
     <div id="estado">
@@ -416,7 +712,7 @@
         <p class="ayuda">
           <b>Un clic</b> quita una palabra del video. Otro clic la devuelve.
           Pasa el mouse por encima y usa el <b>lápiz</b> para corregirla o la
-          <b>estrella</b> para marcarla como clave y que salga en otro color.
+          <b>estrella</b> para marcarla como clave o quitársela.
         </p>
         <div class="zona-texto">
           <div id="transcripcion"></div>
@@ -441,8 +737,8 @@
 </div>
 
 <footer>
-  <span>Hecho por <strong>Joako Estratega</strong>. Nos la hicimos para nuestro propio proceso.</span>
-  <span>¿Tu negocio necesita una herramienta a su medida? <a href="https://wa.me/573028662556" target="_blank" rel="noopener">Escríbenos</a></span>
+  <span>Hecho por <strong>Joako Estratega</strong>. Lo usamos en nuestros propios videos.</span>
+  <span>¿Quieres una app así? <a href="https://wa.me/573028662556?text=Hola%20Joako%2C%20vi%20tu%20editor%20y%20quiero%20una%20app%20as%C3%AD%20para%20mi%20negocio." target="_blank" rel="noopener">Escríbenos</a></span>
 </footer>
 
 <div class="velo" id="veloNombre">
@@ -457,6 +753,83 @@
   </div>
 </div>
 
+<div class="velo" id="veloMovimientos">
+  <div class="dialogo plantillas">
+    <button class="cerrarVentana" id="cerrarMovimientos" aria-label="Cerrar">×</button>
+    <h4>Movimientos de cámara</h4>
+    <div class="filtros" id="filtrosMovimientos"></div>
+    <div class="cuerpoPlantillas" id="cuerpoMovimientos"></div>
+  </div>
+</div>
+
+<div class="velo" id="veloPlantillas">
+  <div class="dialogo plantillas">
+    <button class="cerrarVentana" id="cerrarPlantillas" aria-label="Cerrar">×</button>
+    <h4>Estilos de subtítulo</h4>
+    <div class="filtros" id="filtrosPlantillas"></div>
+    <div class="cuerpoPlantillas" id="cuerpoPlantillas"></div>
+  </div>
+</div>
+
 <script type="module" src="editor.js"></script>
+<div class="velo" id="veloVitrina">
+  <div class="dialogo oscuro">
+    <button class="cerrarVitrina" id="cerrarVitrina" aria-label="Cerrar">×</button>
+    <s class="vitrinaSello">Joako Estratega</s>
+    <h4>No te vendemos una app. Te hacemos la tuya.</h4>
+    <p>Una fábrica de software hace lo que le pidas. Nosotros te decimos qué pedir.</p>
+    <div id="listaServicios"></div>
+    <a class="btnOro" id="hablemos" target="_blank" rel="noopener noreferrer">Cuéntanos qué necesitas</a>
+  </div>
+</div>
+
+<div class="velo" id="veloIdea">
+  <div class="dialogo ancho">
+    <h4>¿Qué le harías a este editor si fuera tuyo?</h4>
+    <p>Escríbelo como se te ocurra. Si dejas tu contacto, te avisamos si lo agregamos.</p>
+
+    <div class="campo">
+      <label for="ideaTexto">¿Qué te hizo falta?</label>
+      <textarea id="ideaTexto" rows="4" maxlength="2000"
+        placeholder="Por ejemplo: que la letra se pueda poner arriba, que el corte respete las pausas largas, que exporte a 60 cuadros..."></textarea>
+    </div>
+
+    <div class="dosCampos">
+      <div class="campo">
+        <label for="ideaNombre">Tu nombre</label>
+        <input type="text" id="ideaNombre" maxlength="80" placeholder="Opcional">
+      </div>
+      <div class="campo">
+        <label for="ideaContacto">WhatsApp o correo</label>
+        <input type="text" id="ideaContacto" maxlength="120" placeholder="Opcional, para avisarte">
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="ideaQueHaces">¿Qué haces? <s>nos ayuda a entender para quién lo estamos haciendo</s></label>
+      <input type="text" id="ideaQueHaces" maxlength="120" placeholder="Opcional. Vendo ropa, doy clases, tengo una agencia...">
+    </div>
+
+    <div class="campo">
+      <label>¿Con qué archivo te falló? <s>no se sube, solo vemos el nombre</s></label>
+      <input type="file" id="ideaArchivos" multiple accept="video/*,image/*,audio/*,.txt,.srt">
+      <div id="ideaListaArchivos" class="archivos"></div>
+      <s class="nota">Si nos dejas cómo contactarte, te pedimos el video por WhatsApp para ver qué falló.</s>
+    </div>
+
+    <s class="nota legal">Al enviar, autorizas a Joako Estratega a guardar lo que escribiste aquí
+      (tu idea, tu nombre, tu contacto, a qué te dedicas y el nombre del archivo), la fecha y el país
+      desde donde escribes, solo para mejorar el editor y responderte. No lo compartimos con nadie. Puedes pedir
+      verlo, corregirlo o borrarlo por WhatsApp al +57 302 866 2556.
+      <a href="https://joakoestratega.com/politica-de-privacidad/" target="_blank" rel="noopener">Política de datos</a></s>
+
+    <div id="ideaAviso" class="avisoIdea"></div>
+    <div class="acciones">
+      <button class="btn suave" id="cancelarIdea">Ahora no</button>
+      <button class="btn" id="enviarIdea">Enviar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
