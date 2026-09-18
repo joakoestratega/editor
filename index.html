@@ -311,6 +311,15 @@
   select:focus{outline:none;border-color:var(--ac)}
 
   /* Colores */
+  /* Un cuadro dentro del grupo, para lo que va junto y tiene nombre propio */
+  .subcuadro{margin:12px 8px 14px;padding:11px 10px 4px;border:1px solid var(--linea);
+             border-radius:8px;background:var(--f0)}
+  .subcuadro .subtitulo-cuadro{font-size:12px;font-weight:600;color:var(--tx);margin-bottom:7px;
+                               letter-spacing:-.01em}
+  .subcuadro .colores,.subcuadro .ctl{padding:0}
+  .subcuadro .check{padding:6px 0}
+  .subcuadro .check s{display:block;font-size:11px;color:var(--tx4);text-decoration:none;margin-top:1px}
+  .subcuadro .ctl label s{font-weight:400;color:var(--tx4);text-decoration:none;font-size:11px}
   .colores{display:flex;flex-direction:column;gap:7px;padding:0 8px}
   .color{display:grid;grid-template-columns:16px 52px 34px 1fr;align-items:center;gap:9px}
   .color .nom{font-size:12.5px;color:var(--tx2)}
@@ -404,8 +413,22 @@
   /* El renglon va suelto A PROPOSITO: el lapiz y la estrella flotan en el hueco
      entre lineas. Con 2.5 el hueco medía 13px y los botones 22px, asi que siempre
      tapaban una palabra de la linea de arriba y no se le podia dar clic. */
-  #transcripcion{font-size:15px;line-height:3;letter-spacing:-.008em;
+  #transcripcion{font-size:15px;line-height:2.2;letter-spacing:-.008em;
                  overflow-y:auto;height:100%;padding-right:6px}
+  /* Una frase por renglón: leer un párrafo corrido de 300 palabras es imposible,
+     y así se puede agarrar una frase entera de un vistazo. */
+  .renglon{padding:5px 8px;border-radius:6px;margin-bottom:2px;
+           border-left:3px solid transparent;transition:background .1s,border-color .1s}
+  .renglon:hover{background:var(--hover);border-left-color:var(--borde2)}
+  .renglon.conEfecto{border-left-color:var(--ac)}
+  /* El efecto de la frase. Se ve al pasar el mouse, y se queda visible si la
+     frase ya lleva uno puesto: asi se ve de un vistazo cómo quedó repartido. */
+  .renglon .efecto{float:right;margin-left:10px;font-family:inherit;font-size:11px;
+                   color:var(--tx3);background:var(--barra);border:1px solid var(--borde2);
+                   border-radius:5px;padding:2px 4px;opacity:0;transition:opacity .12s;
+                   cursor:pointer;min-height:26px}
+  .renglon:hover .efecto,.renglon.conEfecto .efecto{opacity:1}
+  .renglon.conEfecto .efecto{color:var(--tx);border-color:var(--ac);font-weight:600}
   .pal{padding:3px 4px;border-radius:3px;cursor:pointer;transition:background .1s}
   .pal:hover{background:var(--hover)}
   .pal.fuera{color:var(--tx4);text-decoration:line-through;text-decoration-thickness:2px}
@@ -484,9 +507,117 @@
              padding:9px 11px;border-radius:6px}
   .avisoIdea.malo{display:block;background:#FDECEA;color:#8C2F24}
   .avisoIdea.bien{display:block;background:var(--supAc);color:#6B4A00}
+
+  /* ------------------------------------------------- la puerta de entrada
+     Lo primero que ve quien escanea el QR: que dice como funciona y pide los
+     datos. Tapa TODO: hasta que no acepte, el editor no se toca ni se trae
+     el reconocimiento de voz (son casi mil megas: no se gastan sin permiso). */
+  .puerta{position:fixed;inset:0;z-index:80;background:#0F0F14;display:none;
+          overflow-y:auto;padding:26px 16px}
+  body.enPuerta .puerta{display:block}
+  body.enPuerta .cuerpo,body.enPuerta header,body.enPuerta footer{filter:blur(3px);pointer-events:none}
+  .puerta .caja{width:560px;max-width:100%;margin:0 auto;color:#F2F0EA}
+  .puerta .marca{font-size:13px;letter-spacing:.14em;font-weight:700;color:var(--oro);margin-bottom:16px}
+  .puerta h2{font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1.2;color:#FFF;margin-bottom:8px}
+  .puerta .bajada{font-size:14px;color:rgba(242,240,234,.8);line-height:1.6;margin-bottom:18px}
+  .puerta .puntos{list-style:none;margin:0 0 20px;padding:0}
+  .puerta .puntos li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;
+                     border-top:1px solid #26262C;font-size:13.5px;line-height:1.55;
+                     color:rgba(242,240,234,.82)}
+  .puerta .puntos li:last-child{border-bottom:1px solid #26262C}
+  .puerta .puntos b{color:#FFF;font-weight:600}
+  .puerta .icono{color:var(--oro);font-weight:700;flex-shrink:0}
+  .puerta .campo label{color:rgba(242,240,234,.72)}
+  .puerta .campo input[type=text]{background:#17161B;border-color:#2E2E36;color:#F2F0EA;
+                                  padding:12px;font-size:14px;border-radius:8px}
+  .puerta .campo input[type=text]:focus{border-color:var(--oro);box-shadow:0 0 0 3px rgba(248,180,0,.28)}
+  .puerta .campo input.mal{border-color:#E06A5A}
+  .puerta .acepto{display:flex;gap:9px;align-items:flex-start;font-size:12px;
+                  color:rgba(242,240,234,.66);line-height:1.5;margin:12px 0 14px;cursor:pointer}
+  .puerta .acepto input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--oro);flex-shrink:0}
+  .puerta .acepto a{color:rgba(242,240,234,.86)}
+  .puerta .btnEntrar{width:100%;background:var(--oro);color:#0F0F14;border:none;border-radius:9px;
+                     padding:15px 18px;font-family:inherit;font-size:15px;font-weight:700;
+                     letter-spacing:-.01em;cursor:pointer;min-height:48px}
+  .puerta .btnEntrar:hover{filter:brightness(1.06)}
+  .puerta .avisoPuerta{font-size:12.5px;line-height:1.5;margin-bottom:12px;display:none;
+                       padding:10px 12px;border-radius:7px;background:#2A1C18;color:#F0B8AC}
+  .puerta .avisoPuerta.visible{display:block}
+  .puerta .pieNota{font-size:11.5px;color:rgba(242,240,234,.5);line-height:1.55;margin-top:14px}
+  .puerta .btnVerTutorial{width:100%;margin-top:10px;background:transparent;color:rgba(242,240,234,.78);
+                          border:1px solid #2E2E36;border-radius:9px;padding:12px;font-family:inherit;
+                          font-size:13.5px;font-weight:600;cursor:pointer;min-height:44px}
+  .puerta .btnVerTutorial:hover{border-color:var(--oro);color:#fff}
+  @media (max-width:640px){
+    .puerta{padding:18px 14px}
+    .puerta h2{font-size:22px}
+    .puerta .dosCampos{grid-template-columns:1fr}
+  }
+
+  /* ------------------------------------------------- el video de cómo se usa
+     Pesa 7 MB y NO se trae al abrir la página: el navegador solo lo pide cuando
+     la persona le da play (preload="none"). */
+  .btnTutorial{background:transparent;border:1px solid var(--borde2);border-radius:99px;
+               padding:7px 14px;font-family:inherit;font-size:12.5px;font-weight:600;
+               color:var(--tx2);cursor:pointer;white-space:nowrap;min-height:34px}
+  .btnTutorial:hover{border-color:var(--oro);color:var(--tx)}
+  .dialogo.video{width:min(920px,94vw);padding:16px;background:#0F0F14;border-color:#26262C}
+  .dialogo.video h4{color:#fff;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+  .dialogo.video video{width:100%;border-radius:8px;display:block;background:#000}
+  .dialogo.video .cerrarVideo{background:transparent;border:none;color:rgba(242,240,234,.7);
+                              font-size:22px;line-height:1;cursor:pointer;padding:6px 10px;min-height:44px}
+  .dialogo.video .cerrarVideo:hover{color:#fff}
 </style>
 </head>
 <body>
+
+<div class="puerta" id="puerta">
+  <div class="caja">
+    <div class="marca">JOAKO · EDITOR</div>
+    <h2>Tu video no sale de tu computador</h2>
+    <p class="bajada">Este editor trabaja dentro de tu navegador. El video, el audio y el texto se procesan
+      aquí mismo, en tu equipo. No viajan a ningún servidor nuestro ni de nadie.</p>
+
+    <ul class="puntos">
+      <li><span class="icono">1</span><span><b>Se configura una vez.</b> La primera vez el editor prepara
+        el reconocimiento de voz en este navegador. Toma unos 10 minutos y no se repite.</span></li>
+      <li><span class="icono">2</span><span><b>Después funciona sin internet.</b> La configuración queda
+        guardada en este navegador, y con ella el editor trabaja solo con tu equipo.</span></li>
+      <li><span class="icono">3</span><span><b>Si borras los datos del navegador, se borra la
+        configuración</b> y hay que hacerla de nuevo.</span></li>
+      <li><span class="icono">4</span><span><b>Gratis y sin marca de agua.</b> Corta los silencios, pone
+        los subtítulos y mueve la cámara solo.</span></li>
+    </ul>
+
+    <div class="dosCampos">
+      <div class="campo">
+        <label for="regNombre">Nombre</label>
+        <input type="text" id="regNombre" maxlength="80" autocomplete="name" placeholder="Tu nombre">
+      </div>
+      <div class="campo">
+        <label for="regTelefono">WhatsApp</label>
+        <input type="text" id="regTelefono" maxlength="30" inputmode="tel" autocomplete="tel" placeholder="300 000 0000">
+      </div>
+    </div>
+    <div class="campo">
+      <label for="regCorreo">Correo</label>
+      <input type="text" id="regCorreo" maxlength="120" inputmode="email" autocomplete="email" placeholder="tucorreo@ejemplo.com">
+    </div>
+
+    <label class="acepto">
+      <input type="checkbox" id="regAcepto">
+      <span>Autorizo a Joako Estratega a guardar mi nombre, WhatsApp y correo para darme soporte de esta
+        herramienta y contarme lo que le agregamos. Puedo pedir verlos, corregirlos o borrarlos por
+        WhatsApp al +57 302 866 2556 (Ley 1581 de 2012).
+        <a href="https://joakoestratega.com/politica-editor/" target="_blank" rel="noopener">Política de datos del editor</a></span>
+    </label>
+
+    <div class="avisoPuerta" id="regAviso"></div>
+    <button class="btnEntrar" id="regEntrar">Acepto y empiezo la configuración</button>
+    <button class="btnVerTutorial" id="verTutorialPuerta" type="button">▶ Ver cómo se usa · 2 min</button>
+    <p class="pieNota">Hecho por Joako Estratega. Lo usamos en nuestros propios videos.</p>
+  </div>
+</div>
 
 <header>
   <div class="logo">JOAKO<b>·</b>EDITOR</div>
@@ -497,6 +628,7 @@
   </div>
   <div class="mensajeArriba">
     <span class="fraseArriba">Estamos creando el mejor editor de video automático, gratis y sin marca de agua.</span>
+    <button class="btnTutorial" id="abrirTutorial">▶ Cómo se usa</button>
     <button class="btnIdea" id="abrirIdea">¿Qué le agregamos?</button>
   </div>
   <div class="fin">
@@ -525,9 +657,6 @@
       </div>
       <div class="dentro">
         <div id="listaEstilos"></div>
-        <label class="check" title="Resalta solas las palabras que más pesan. Con la estrella cambias las que quieras.">
-          <input type="checkbox" id="clavesSolas" checked>
-          <span><span class="nom">Elegir palabras clave solas</span></span></label>
 
         <div class="ctl" data-control="fuente">
           <label for="fuente">Tipografía</label>
@@ -559,12 +688,6 @@
             <input type="color" id="colorFondo" value="#F8B400">
             <input type="text" id="codigoFondo" value="#F8B400" maxlength="14" spellcheck="false">
           </div>
-          <div class="color" data-control="clave">
-            <span></span>
-            <span class="nom">Clave</span>
-            <input type="color" id="colorDestacada" value="#0F0F14">
-            <input type="text" id="codigoDestacada" value="#0F0F14" maxlength="14" spellcheck="false">
-          </div>
         </div>
         <div class="paleta">
           <s>De tu marca:</s>
@@ -575,6 +698,29 @@
         </div>
 
         <canvas id="muestra" width="360" height="130"></canvas>
+
+        <!-- Las palabras clave tienen cuadro propio: son lo que hace que un reel
+             se vea de anuncio, y antes estaban escondidas en una fila que decia
+             "Clave" entre los colores. -->
+        <div class="subcuadro">
+          <div class="subtitulo-cuadro">Palabras clave</div>
+          <label class="check" title="Resalta solas las palabras que más pesan. Con la estrella, en el texto de abajo, cambias las que quieras.">
+            <input type="checkbox" id="clavesSolas" checked>
+            <span><span class="nom">Elegirlas solas</span>
+              <s>en el texto de abajo, la ★ te deja cambiarlas</s></span></label>
+          <div class="colores">
+            <div class="color" data-control="clave">
+              <span></span>
+              <span class="nom">Color</span>
+              <input type="color" id="colorDestacada" value="#0F0F14">
+              <input type="text" id="codigoDestacada" value="#0F0F14" maxlength="14" spellcheck="false">
+            </div>
+          </div>
+          <div class="ctl" data-control="tamanoClave">
+            <label>Tamaño <b id="valorClaveGrande">1,0x</b> <s>más grande que el resto</s></label>
+            <input type="range" id="claveGrande" min="100" max="180" step="5" value="100">
+          </div>
+        </div>
 
         <div class="ctl" data-control="tamano">
           <label>Tamaño de letra <b id="valorTamano">5</b></label>
@@ -643,6 +789,17 @@
       </div>
       <div class="dentro">
         <div id="listaMovimiento"></div>
+
+        <!-- La edicion por partes. El movimiento de arriba va parejo en todo el
+             video; esto le da a CADA FRASE lo suyo, que es lo que hace que no
+             se sienta repetitivo. -->
+        <div class="subcuadro">
+          <div class="subtitulo-cuadro">Edición por frases</div>
+          <label class="check" title="Reparte solo acercamientos, zoom y blanco y negro entre las frases. En el texto de abajo puedes cambiar cada una.">
+            <input type="checkbox" id="efectosSolos" checked>
+            <span><span class="nom">Repartirla sola</span>
+              <s>en el texto de abajo cambias frase por frase</s></span></label>
+        </div>
         <div class="ctl" style="margin-top:12px">
           <label><span id="nombreAjusteMov">Qué tan cerca</span> <b id="valorZoom">1.85x</b></label>
           <input type="range" id="fuerzaZoom" min="1.3" max="2" step="0.05" value="1.85">
@@ -783,6 +940,15 @@
   </div>
 </div>
 
+<div class="velo" id="veloTutorial">
+  <div class="dialogo video">
+    <h4>Cómo se usa el editor
+      <button class="cerrarVideo" id="cerrarTutorial" title="Cerrar" aria-label="Cerrar">×</button></h4>
+    <video id="videoTutorial" controls preload="none" playsinline
+           poster="tutorial/portada.jpg" src="tutorial/como-se-usa.mp4"></video>
+  </div>
+</div>
+
 <div class="velo" id="veloIdea">
   <div class="dialogo ancho">
     <h4>¿Qué le harías a este editor si fuera tuyo?</h4>
@@ -821,7 +987,7 @@
       (tu idea, tu nombre, tu contacto, a qué te dedicas y el nombre del archivo), la fecha y el país
       desde donde escribes, solo para mejorar el editor y responderte. No lo compartimos con nadie. Puedes pedir
       verlo, corregirlo o borrarlo por WhatsApp al +57 302 866 2556.
-      <a href="https://joakoestratega.com/politica-de-privacidad/" target="_blank" rel="noopener">Política de datos</a></s>
+      <a href="https://joakoestratega.com/politica-editor/" target="_blank" rel="noopener">Política de datos del editor</a></s>
 
     <div id="ideaAviso" class="avisoIdea"></div>
     <div class="acciones">
