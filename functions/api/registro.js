@@ -90,20 +90,21 @@ export async function onRequest(contexto) {
 
   try {
     await entorno.editor_ideas.prepare(
-      `INSERT INTO registros (cuando, nombre, telefono, correo, acepto, aviso, version, pais)
-       VALUES (?, ?, ?, ?, 1, ?, ?, ?)`
+      `INSERT INTO registros (cuando, nombre, telefono, correo, acepto, aviso, quien, version, pais)
+       VALUES (?, ?, ?, ?, 1, ?, ?, ?, ?)`
     ).bind(
-      // Solo la hora, no el instante exacto: con los milisegundos se podia
-      // emparejar esta fila con la cuenta de uso (que es anonima) y ponerle
-      // nombre y correo ([SEG] ciclo 2, punto 4).
+      // La hora, sin minutos. Ya no es por esconder nada (el uso va unido a la
+      // persona a proposito), pero tampoco hace falta guardar el instante exacto.
       new Date().toISOString().slice(0, 13),
       nombre,
       telefono,
       correo,
-      // OJO: el numero del navegador (quien) NO se guarda aqui a proposito. La
-      // tabla de uso es anonima; si este registro lo trajera, cruzando las dos
-      // quedaria todo el uso con nombre y correo ([SEG] 2026-09-17, punto 3).
       recortar(c.aviso, 24),
+      // El numero del navegador. Es lo que une esta fila con la tabla de uso,
+      // para poder ver cuantas veces entro esta persona y que hizo. Se guarda
+      // porque la casilla lo dice desde el aviso 2026-09-18-v2; antes NO se
+      // guardaba, justamente porque el aviso prometia que el uso era anonimo.
+      recortar(c.quien, 16),
       recortar(c.version, 40),
       peticion.cf?.country || '',
     ).run();

@@ -1,9 +1,13 @@
-// Cuenta CÓMO se usa el editor. No quién: cómo.
+// Cuenta CÓMO se usa el editor.
 //
-// Esto no lleva nombre, ni correo, ni teléfono, ni la dirección de internet, ni
-// el nombre del archivo, ni una letra de lo que la persona dijo en su video.
-// Lleva un número al azar que se queda en ese navegador para poder distinguir
-// "una persona que abrió diez veces" de "diez personas". Nada más.
+// Aquí no viaja el nombre, ni el correo, ni el teléfono, ni la dirección de
+// internet, ni el nombre del archivo, ni una letra de lo que la persona dijo en
+// su video. Viaja un número que se queda en ese navegador.
+//
+// OJO: ese número es el mismo que guarda `registros` desde el aviso
+// 2026-09-18-v2, así que estas filas SÍ se pueden unir con la persona. Eso es a
+// propósito y la casilla del editor lo dice. Las filas de quien aceptó el aviso
+// viejo (v1) no se pueden unir con nada, porque esa fila no guardó el número.
 //
 // Con esto se contesta lo que de verdad hace falta para mejorar el editor:
 // cuántos lo abren, cuántos sueltan un video, cuántos llegan a exportar,
