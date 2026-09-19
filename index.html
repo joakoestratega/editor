@@ -423,6 +423,39 @@
   .renglon.conEfecto{border-left-color:var(--ac)}
   /* El efecto de la frase. Se ve al pasar el mouse, y se queda visible si la
      frase ya lleva uno puesto: asi se ve de un vistazo cómo quedó repartido. */
+  /* El ＋ de cada frase para meter un recurso. Al lado del selector de efecto. */
+  .renglon .masRecurso{float:right;margin-left:6px;width:26px;height:26px;min-height:26px;
+    font-family:inherit;font-size:15px;line-height:1;color:var(--tx3);background:var(--barra);
+    border:1px solid var(--borde2);border-radius:5px;cursor:pointer;opacity:0;transition:opacity .12s}
+  .renglon:hover .masRecurso{opacity:1}
+  .renglon .masRecurso:hover{border-color:var(--ac);color:var(--tx)}
+  /* La lista de recursos ya puestos, en el panel */
+  #listaRecursos .vacio{font-size:11px;color:var(--tx4);text-decoration:none}
+  .recFila{display:grid;grid-template-columns:1fr auto 70px auto auto;align-items:center;gap:6px;
+    padding:5px 0;border-top:1px solid var(--linea)}
+  .recFila:first-child{border-top:0}
+  .recFila b{font-size:12px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .recFila s{font-size:10.5px;color:var(--tx4);text-decoration:none}
+  .recFila .valVel{color:var(--tx3);font-variant-numeric:tabular-nums}
+  .recFila input[type=range]{width:70px}
+  .quitarRec{width:24px;height:24px;min-height:24px;border:1px solid var(--borde2);border-radius:5px;
+    background:var(--barra);color:var(--tx3);cursor:pointer;font-size:12px}
+  .quitarRec:hover{border-color:var(--rojo);color:var(--rojo)}
+  .pistaRec{display:block;font-size:11px;color:var(--tx4);text-decoration:none;margin-top:8px;line-height:1.4}
+  /* La ventana para elegir el recurso */
+  .dialogo.recursos{width:min(680px,94vw);padding:20px}
+  .dialogo.recursos h4{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+  .gridRecursos{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:14px 0}
+  .recPredef{border:1px solid var(--borde2);border-radius:8px;overflow:hidden;background:#0F0F14;
+    cursor:pointer;padding:0;display:flex;flex-direction:column}
+  .recPredef:hover{border-color:var(--ac)}
+  .recPredef video{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;background:#0F0F14}
+  .recPredef span{font-size:11.5px;color:var(--tx2);padding:6px 4px;text-align:center}
+  .subirRec{display:flex;align-items:center;gap:10px;border:1px dashed var(--borde2);border-radius:8px;
+    padding:12px;cursor:pointer;font-size:12.5px;color:var(--tx3)}
+  .subirRec:hover{border-color:var(--ac);color:var(--tx)}
+  .subirRec input{font-size:12px}
+
   .renglon .efecto{float:right;margin-left:10px;font-family:inherit;font-size:11px;
                    color:var(--tx3);background:var(--barra);border:1px solid var(--borde2);
                    border-radius:5px;padding:2px 4px;opacity:0;transition:opacity .12s;
@@ -564,6 +597,12 @@
   .dialogo.video{width:min(920px,94vw);padding:16px;background:#0F0F14;border-color:#26262C}
   .dialogo.video h4{color:#fff;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
   .dialogo.video video{width:100%;border-radius:8px;display:block;background:#000}
+  .velTutorial{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap}
+  .velTutorial s{font-size:11.5px;color:rgba(242,240,234,.55);text-decoration:none;margin-right:2px}
+  .velTutorial button{font-family:inherit;font-size:12px;font-weight:600;color:rgba(242,240,234,.8);
+    background:transparent;border:1px solid #2E2E36;border-radius:6px;padding:5px 11px;cursor:pointer;min-height:32px}
+  .velTutorial button:hover{border-color:var(--oro)}
+  .velTutorial button.on{background:var(--oro);color:#0F0F14;border-color:var(--oro)}
   .dialogo.video .cerrarVideo{background:transparent;border:none;color:rgba(242,240,234,.7);
                               font-size:22px;line-height:1;cursor:pointer;padding:6px 10px;min-height:44px}
   .dialogo.video .cerrarVideo:hover{color:#fff}
@@ -804,6 +843,14 @@
           <label><span id="nombreAjusteMov">Qué tan cerca</span> <b id="valorZoom">1.85x</b></label>
           <input type="range" id="fuerzaZoom" min="1.3" max="2" step="0.05" value="1.85">
         </div>
+
+        <!-- Recursos: meter un meme, un b-roll o una tarjeta en medio del video,
+             para darle golpe. Se agregan desde el texto de abajo, con el ＋. -->
+        <div class="subcuadro">
+          <div class="subtitulo-cuadro">Recursos en el video</div>
+          <div id="listaRecursos"><s class="vacio">Aún no has metido ninguno.</s></div>
+          <s class="pistaRec">En el texto de abajo, el <b>＋</b> de cada frase mete uno después de ella.</s>
+        </div>
       </div>
     </div>
 
@@ -940,12 +987,32 @@
   </div>
 </div>
 
+<div class="velo" id="veloRecurso">
+  <div class="dialogo recursos">
+    <h4>Meter un recurso
+      <button class="cerrarVideo" id="cerrarRecurso" title="Cerrar" aria-label="Cerrar">×</button></h4>
+    <p>Un meme, un b-roll o una tarjeta que entra en medio del video. Pasa el mouse para verlo.</p>
+    <div id="gridRecursos" class="gridRecursos"></div>
+    <label class="subirRec">
+      <input type="file" id="subirRecurso" accept="video/*,image/*">
+      <span>O sube el tuyo (un meme, un video corto)</span>
+    </label>
+  </div>
+</div>
+
 <div class="velo" id="veloTutorial">
   <div class="dialogo video">
     <h4>Cómo se usa el editor
       <button class="cerrarVideo" id="cerrarTutorial" title="Cerrar" aria-label="Cerrar">×</button></h4>
     <video id="videoTutorial" controls preload="none" playsinline
            poster="tutorial/portada.jpg" src="tutorial/como-se-usa.mp4"></video>
+    <div class="velTutorial">
+      <s>Velocidad</s>
+      <button type="button" data-vel="1">1x</button>
+      <button type="button" data-vel="1.25">1.25x</button>
+      <button type="button" data-vel="1.5" class="on">1.5x</button>
+      <button type="button" data-vel="2">2x</button>
+    </div>
   </div>
 </div>
 

@@ -21,7 +21,7 @@ const ORIGENES = [
 ];
 
 // Solo estos momentos, y ninguno más. Cualquier otra cosa se descarta.
-const MOMENTOS = ['abrio', 'solto', 'analizo', 'exporto', 'fallo', 'idea', 'servicios', 'puerta', 'entra', 'tutorial'];
+const MOMENTOS = ['abrio', 'solto', 'analizo', 'exporto', 'fallo', 'idea', 'servicios', 'puerta', 'entra', 'tutorial', 'recurso'];
 
 const cabeceras = (origen) => ({
   'Access-Control-Allow-Origin': ORIGENES.includes(origen) ? origen : ORIGENES[0],

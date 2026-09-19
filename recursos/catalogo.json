@@ -1,0 +1,9 @@
+{
+  "predefinidos": [
+    { "id": "ojo",        "nombre": "OJO",        "archivo": "predefinidos/ojo.mp4",        "dura": 1.6 },
+    { "id": "espera",     "nombre": "Espera...",  "archivo": "predefinidos/espera.mp4",     "dura": 1.6 },
+    { "id": "jaja",       "nombre": "Jajaja",     "archivo": "predefinidos/jaja.mp4",       "dura": 1.4 },
+    { "id": "importante", "nombre": "Importante", "archivo": "predefinidos/importante.mp4", "dura": 1.8 },
+    { "id": "corte",      "nombre": "Corte",      "archivo": "predefinidos/corte.mp4",      "dura": 0.5 }
+  ]
+}
