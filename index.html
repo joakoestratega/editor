@@ -476,10 +476,16 @@
          color:var(--tx3);vertical-align:middle;font-variant-numeric:tabular-nums}
   .ficha.sonido{background:var(--acSuave);color:var(--tx2)}
   .ficha.fuera{text-decoration:none;opacity:.5}
-  #lapiz,#clave{position:absolute;display:none;width:24px;height:20px;padding:0;
+  #lapiz,#clave,#partir{position:absolute;display:none;width:24px;height:20px;padding:0;
                 border-radius:5px;border:1px solid #D8D4CB;background:var(--f1);
                 color:#0F0F14;font-size:12px;cursor:pointer;line-height:1;z-index:5}
-  #lapiz:hover,#clave:hover{background:var(--ac);color:var(--sobreAc)}
+  #lapiz:hover,#clave:hover,#partir:hover{background:var(--ac);color:var(--sobreAc)}
+  /* Unir esta frase con la de arriba: aparece al pasar el mouse por el renglón */
+  .renglon .unirFrase{float:left;margin-right:6px;width:24px;height:24px;min-height:24px;
+    font-family:inherit;font-size:13px;line-height:1;color:var(--tx3);background:var(--barra);
+    border:1px solid var(--borde2);border-radius:5px;cursor:pointer;opacity:0;transition:opacity .12s}
+  .renglon:hover .unirFrase{opacity:1}
+  .renglon .unirFrase:hover{border-color:var(--ac);color:var(--tx)}
   .resumen{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:12px;
            font-size:12.5px;color:var(--tx3);flex-shrink:0}
   .resumen b{color:var(--tx);font-weight:500;font-variant-numeric:tabular-nums}
@@ -822,12 +828,12 @@
 
     <div class="grupo" data-grupo="movimiento">
       <div class="cabeza">
-        <span class="flecha">›</span><span class="titulo">Movimiento</span>
+        <span class="flecha">›</span><span class="titulo">Movimiento por frase</span>
         <label class="palanca" title="Acercar y alejar la cámara solo">
           <input type="checkbox" id="usarMovimiento" checked><span></span></label>
       </div>
       <div class="dentro">
-        <div id="listaMovimiento"></div>
+        <div id="listaMovimiento" style="display:none"></div>
 
         <!-- La edicion por partes. El movimiento de arriba va parejo en todo el
              video; esto le da a CADA FRASE lo suyo, que es lo que hace que no
@@ -839,7 +845,7 @@
             <span><span class="nom">Repartirla sola</span>
               <s>en el texto de abajo cambias frase por frase</s></span></label>
         </div>
-        <div class="ctl" style="margin-top:12px">
+        <div class="ctl" style="margin-top:12px;display:none">
           <label><span id="nombreAjusteMov">Qué tan cerca</span> <b id="valorZoom">1.85x</b></label>
           <input type="range" id="fuerzaZoom" min="1.3" max="2" step="0.05" value="1.85">
         </div>
@@ -922,6 +928,7 @@
           <div id="transcripcion"></div>
           <button id="lapiz" title="Corregir esta palabra">✎</button>
           <button id="clave" title="Marcar como palabra clave">★</button>
+          <button id="partir" title="Partir la frase aquí: desde esta palabra empieza una frase nueva">✂</button>
         </div>
         <div class="resumen">
           <button class="btn suave chico" id="devolverTodo">Devolver todo</button>
