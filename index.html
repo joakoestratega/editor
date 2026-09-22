@@ -171,6 +171,12 @@
   .dialogo.oscuro .servicio b{display:block;font-size:14.5px;font-weight:600;color:#FFF;letter-spacing:-.015em}
   .dialogo.oscuro .servicio s{display:block;font-size:12.5px;color:rgba(242,240,234,.7);
     text-decoration:none;margin-top:3px;line-height:1.45}
+  /* El llamado de cada servicio. Verde: dice sin palabras que abre WhatsApp, y
+     deja el dorado para el boton general de abajo. */
+  .dialogo.oscuro .servicio .cotizar{display:inline-block;margin-top:11px;padding:9px 16px;
+    border-radius:7px;background:#25D366;color:#0B2E18;font-size:12.5px;font-weight:700;
+    letter-spacing:.04em;transition:filter .12s}
+  .dialogo.oscuro .servicio:hover .cotizar{filter:brightness(1.07)}
   .btnOro{display:block;text-align:center;margin-top:14px;padding:13px;border-radius:8px;
           background:var(--oro);color:#0F0F14;font-weight:700;font-size:15px;text-decoration:none;
           transition:filter .12s}
@@ -580,6 +586,25 @@
                                   padding:12px;font-size:14px;border-radius:8px}
   .puerta .campo input[type=text]:focus{border-color:var(--oro);box-shadow:0 0 0 3px rgba(248,180,0,.28)}
   .puerta .campo input.mal{border-color:#E06A5A}
+  /* WhatsApp: el indicativo del pais a la izquierda y el numero al lado. La
+     lista se busca escribiendo, que con 200 paises es la unica forma usable. */
+  .telefono{position:relative;display:flex;gap:7px}
+  .telefono .indicativo{flex:0 0 auto;display:flex;align-items:center;gap:6px;
+    background:#17161B;border:1px solid #2E2E36;border-radius:7px;color:#F2F0EA;
+    font:inherit;font-size:14px;padding:0 11px;cursor:pointer;min-height:42px}
+  .telefono .indicativo:hover{border-color:#4A4A54}
+  .telefono .indicativo i{font-style:normal;font-size:10px;color:rgba(242,240,234,.55)}
+  .telefono #regTelefono{flex:1 1 auto;min-width:0}
+  .listaPaises{position:absolute;z-index:5;top:calc(100% + 5px);left:0;width:min(320px,100%);
+    background:#17161B;border:1px solid #3A3A42;border-radius:9px;padding:8px;
+    box-shadow:0 14px 34px rgba(0,0,0,.5)}
+  .listaPaises input{width:100%;margin-bottom:7px}
+  .listaPaises > div{max-height:230px;overflow-y:auto}
+  .listaPaises button{display:flex;width:100%;gap:9px;background:none;border:none;color:#F2F0EA;
+    font:inherit;font-size:13.5px;text-align:left;padding:8px 9px;border-radius:6px;cursor:pointer}
+  .listaPaises button:hover,.listaPaises button.puesto{background:#26252C}
+  .listaPaises button s{text-decoration:none;color:rgba(242,240,234,.55);margin-left:auto}
+  .listaPaises .nada{color:rgba(242,240,234,.55);font-size:13px;padding:9px}
   .puerta .acepto{display:flex;gap:9px;align-items:flex-start;font-size:12px;
                   color:rgba(242,240,234,.66);line-height:1.5;margin:12px 0 14px;cursor:pointer}
   .puerta .acepto input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--oro);flex-shrink:0}
@@ -650,7 +675,18 @@
       </div>
       <div class="campo">
         <label for="regTelefono">WhatsApp</label>
-        <input type="text" id="regTelefono" maxlength="30" inputmode="tel" autocomplete="tel" placeholder="300 000 0000">
+        <!-- Indicativo aparte: sin esto llegaban numeros de otros paises sin
+             saber de donde, y no habia forma de escribirles. -->
+        <div class="telefono">
+          <button type="button" class="indicativo" id="regPais" aria-haspopup="listbox" aria-expanded="false">
+            <b id="regPaisCodigo">+57</b><i aria-hidden="true">▾</i>
+          </button>
+          <input type="text" id="regTelefono" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="300 000 0000">
+          <div class="listaPaises" id="regListaPaises" hidden>
+            <input type="text" id="regBuscarPais" placeholder="Busca tu país" autocomplete="off">
+            <div id="regPaisesFiltrados" role="listbox"></div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="campo">
@@ -831,9 +867,13 @@
           <span><span class="nom">Quitar muletillas</span></span></label>
         <div class="ctl" style="margin-top:12px">
           <label for="oido">Qué tan bien te oye</label>
+          <!-- El RÁPIDO va primero y seleccionado. Estaba al revés y por eso todo
+               el mundo bajaba 932 MB la primera vez aunque el código dijera que
+               el rápido era el de fábrica: manda lo que tiene el select. Con 932 MB
+               la espera es larga y la descarga se cae más fácil (2026-09-22). -->
           <select id="oido">
+            <option value="rapido" selected>Rápido · trae 286 MB, se le escapan más palabras</option>
             <option value="preciso">Preciso · acierta más, trae 932 MB la primera vez</option>
-            <option value="rapido">Rápido · trae 286 MB, se le escapan más palabras</option>
           </select>
         </div>
       </div>
