@@ -553,8 +553,17 @@
      el reconocimiento de voz (son casi mil megas: no se gastan sin permiso). */
   .puerta{position:fixed;inset:0;z-index:80;background:#0F0F14;display:none;
           overflow-y:auto;padding:26px 16px}
-  body.enPuerta .puerta{display:block}
-  body.enPuerta .cuerpo,body.enPuerta header,body.enPuerta footer{filter:blur(3px);pointer-events:none}
+  body.enPuerta #puerta{display:block}
+  /* El aviso de "esto se hace en el computador" usa la misma cara de la puerta,
+     pero se abre por su cuenta y DESPUES de ella. */
+  body.enAvisoPC #avisoPC{display:block}
+  body.enPuerta .cuerpo,body.enPuerta header,body.enPuerta footer,
+  body.enAvisoPC .cuerpo,body.enAvisoPC header,body.enAvisoPC footer{filter:blur(3px);pointer-events:none}
+  .puerta .btnSeguirAqui{width:100%;margin-top:10px;background:transparent;border:none;
+          color:rgba(242,240,234,.62);font:inherit;font-size:13px;padding:9px;cursor:pointer;
+          text-decoration:underline;text-underline-offset:3px}
+  .puerta .btnSeguirAqui:hover{color:#fff}
+  .puerta .pieNota a{color:rgba(242,240,234,.7)}
   .puerta .caja{width:560px;max-width:100%;margin:0 auto;color:#F2F0EA}
   .puerta .marca{font-size:13px;letter-spacing:.14em;font-weight:700;color:var(--oro);margin-bottom:16px}
   .puerta h2{font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1.2;color:#FFF;margin-bottom:8px}
@@ -661,6 +670,25 @@
     <button class="btnEntrar" id="regEntrar">Acepto y empiezo la configuración</button>
     <button class="btnVerTutorial" id="verTutorialPuerta" type="button">▶ Ver cómo se usa · 2 min</button>
     <p class="pieNota">Hecho por Joako Estratega. Lo usamos en nuestros propios videos.</p>
+  </div>
+</div>
+
+<!-- Sale SOLO en celular y SOLO después de la puerta. Antes de la puerta seria un
+     filtro: la persona se va sin dejar sus datos. Aqui ya la conocemos, asi que
+     deja de ser un freno y pasa a ser una instruccion: llevate el link al
+     computador, que es donde el editor rinde. -->
+<div class="puerta" id="avisoPC">
+  <div class="caja">
+    <div class="marca">JOAKO · EDITOR</div>
+    <h2>Esta aplicación funciona mejor en el computador</h2>
+    <p class="bajada">Aquí puedes mirar cómo funciona con una versión Lite, pero para usar la versión
+      completa y editar tu video gratis y sin marca de agua, se recomienda hacerlo en el computador.</p>
+
+    <button class="btnEntrar" id="pcCompartir">Mandarme el link</button>
+    <button class="btnVerTutorial" id="pcCopiar" type="button">Copiar el link</button>
+    <div class="avisoPuerta" id="pcAviso"></div>
+    <button class="btnSeguirAqui" id="pcLite" type="button">Seguir aquí con la versión Lite</button>
+    <p class="pieNota">¿Estás en el computador? <a href="#" id="pcSeguir">Abre la versión completa aquí mismo</a></p>
   </div>
 </div>
 
@@ -877,8 +905,8 @@
 
     <button class="vitrina" id="abrirVitrina" type="button">
       <s class="vitrinaSello">Joako Estratega</s>
-      <b>Te hacemos la tuya</b>
-      <span>Una fábrica de software hace lo que le pidas. Nosotros te decimos qué pedir.</span>
+      <b>¿Tu negocio te da dinero pero te quita mucho tiempo?</b>
+      <span>Recupera tus horas. Tú pones la estrategia y nuestra tecnología ejecuta el trabajo largo y tedioso.</span>
       <i aria-hidden="true">→</i>
     </button>
 
@@ -987,8 +1015,8 @@
   <div class="dialogo oscuro">
     <button class="cerrarVitrina" id="cerrarVitrina" aria-label="Cerrar">×</button>
     <s class="vitrinaSello">Joako Estratega</s>
-    <h4>No te vendemos una app. Te hacemos la tuya.</h4>
-    <p>Una fábrica de software hace lo que le pidas. Nosotros te decimos qué pedir.</p>
+    <h4>¿Tu negocio te da dinero pero te quita mucho tiempo?</h4>
+    <p>Recupera tus horas. Tú pones la estrategia y nuestra tecnología ejecuta el trabajo largo y tedioso.</p>
     <div id="listaServicios"></div>
     <a class="btnOro" id="hablemos" target="_blank" rel="noopener noreferrer">Cuéntanos qué necesitas</a>
   </div>
