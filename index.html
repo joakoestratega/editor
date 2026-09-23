@@ -448,9 +448,16 @@
   /* El efecto de la frase. Se ve al pasar el mouse, y se queda visible si la
      frase ya lleva uno puesto: asi se ve de un vistazo cómo quedó repartido. */
   /* El ＋ de cada frase para meter un recurso. Al lado del selector de efecto. */
-  .renglon .masRecurso{float:right;margin-left:6px;width:26px;height:26px;min-height:26px;
+  /* Los controles de la frase van en su propia fila, NO flotando sobre el texto.
+     Con float, en la columna angosta el selector de efecto empujaba las palabras
+     hacia abajo y dejaba un hueco en blanco: parecía que faltaban frases enteras
+     (Joako, 2026-09-22). */
+  .renglon .cabezaFrase{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+  .renglon .cabezaFrase .efecto{flex:1;min-width:0}
+  .renglon .palabras{display:block}
+  .renglon .masRecurso{margin-left:0;width:26px;height:26px;min-height:26px;flex:0 0 auto;
     font-family:inherit;font-size:15px;line-height:1;color:var(--tx3);background:var(--barra);
-    border:1px solid var(--borde2);border-radius:5px;cursor:pointer;opacity:0;transition:opacity .12s}
+    border:1px solid var(--borde2);border-radius:5px;cursor:pointer;opacity:.75;transition:opacity .12s}
   .renglon:hover .masRecurso{opacity:1}
   .renglon .masRecurso:hover{border-color:var(--ac);color:var(--tx)}
   /* La lista de recursos ya puestos, en el panel */
@@ -480,12 +487,22 @@
   .subirRec:hover{border-color:var(--ac);color:var(--tx)}
   .subirRec input{font-size:12px}
 
-  .renglon .efecto{float:right;margin-left:10px;font-family:inherit;font-size:11px;
+  .renglon .efecto{font-family:inherit;font-size:11px;
                    color:var(--tx3);background:var(--barra);border:1px solid var(--borde2);
                    border-radius:5px;padding:2px 4px;opacity:0;transition:opacity .12s;
                    cursor:pointer;min-height:26px}
+  .renglon .efecto{opacity:.75}
   .renglon:hover .efecto,.renglon.conEfecto .efecto{opacity:1}
   .renglon.conEfecto .efecto{color:var(--tx);border-color:var(--ac);font-weight:600}
+  /* El recurso metido, dentro del texto: se ve dónde entra, cómo entra y se quita. */
+  .pal.recurso{display:inline-flex;align-items:center;gap:6px;background:var(--supAc);
+    border:1px solid var(--ac);padding:3px 5px;cursor:default;vertical-align:middle}
+  .pal.recurso b{font-size:11.5px;font-weight:600;color:var(--tx)}
+  .pal.recurso .modoRecurso{font-family:inherit;font-size:10.5px;padding:1px 3px;min-height:0;
+    border:1px solid var(--borde2);border-radius:4px;background:var(--barra);color:var(--tx2);cursor:pointer}
+  .pal.recurso .quitarRecurso{width:18px;height:18px;min-height:18px;line-height:1;padding:0;
+    border:0;border-radius:4px;background:transparent;color:var(--tx3);cursor:pointer;font-size:12px}
+  .pal.recurso .quitarRecurso:hover{background:#E06A5A;color:#fff}
   .pal{padding:3px 4px;border-radius:3px;cursor:pointer;transition:background .1s}
   .pal:hover{background:var(--hover)}
   .pal.fuera{color:var(--tx4);text-decoration:line-through;text-decoration-thickness:2px}
@@ -505,7 +522,7 @@
                 color:#0F0F14;font-size:12px;cursor:pointer;line-height:1;z-index:5}
   #lapiz:hover,#clave:hover,#partir:hover{background:var(--ac);color:var(--sobreAc)}
   /* Unir esta frase con la de arriba: aparece al pasar el mouse por el renglón */
-  .renglon .unirFrase{float:left;margin-right:6px;width:24px;height:24px;min-height:24px;
+  .renglon .unirFrase{flex:0 0 auto;width:24px;height:24px;min-height:24px;
     font-family:inherit;font-size:13px;line-height:1;color:var(--tx3);background:var(--barra);
     border:1px solid var(--borde2);border-radius:5px;cursor:pointer;opacity:0;transition:opacity .12s}
   .renglon:hover .unirFrase{opacity:1}
