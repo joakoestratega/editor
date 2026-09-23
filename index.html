@@ -393,7 +393,25 @@
   .progreso div{height:100%;width:0;background:var(--ac);transition:width .25s;border-radius:3px}
 
   /* Mesa de trabajo */
-  #mesa{display:none;flex-direction:column;overflow:hidden;height:100%}
+  /* LA MESA VA EN DOS COLUMNAS: el video a la izquierda y el texto a la derecha.
+     Antes iba en franjas horizontales y no servía: los videos son verticales, así
+     que el video quedaba chiquito con dos manchas negras a los lados, y el texto
+     apretado en una franja de abajo donde no se alcanzaba a leer ni una frase
+     completa (Joako, 2026-09-22). En dos columnas el video se ve grande de verdad
+     y las frases caen una debajo de otra, que es como se leen y se corrigen. */
+  #mesa{display:none;grid-template-columns:minmax(0,1fr) minmax(330px,420px);
+        grid-template-rows:1fr auto;overflow:hidden;height:100%}
+  #mesa .lienzo{grid-column:1;grid-row:1}
+  #mesa .transporte{grid-column:1;grid-row:2}
+  /* El texto ocupa las dos filas de la derecha: es una columna entera. */
+  #mesa .texto{grid-column:2;grid-row:1 / span 2;max-height:none;
+               border-top:0;border-left:1px solid var(--linea)}
+  /* Pantalla angosta: vuelve a quedar uno debajo del otro. */
+  @media (max-width:900px){
+    #mesa{grid-template-columns:minmax(0,1fr);grid-template-rows:1fr auto auto}
+    #mesa .texto{grid-column:1;grid-row:3;border-left:0;border-top:1px solid var(--linea);
+                 max-height:42vh}
+  }
   /* El area del video SIEMPRE en negro, aunque el resto sea claro */
   .lienzo{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;
           min-height:0;background:var(--escena)}
