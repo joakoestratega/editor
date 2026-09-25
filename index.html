@@ -1103,6 +1103,7 @@
 
 <script type="module" src="editor.js"></script>
 <script type="module" src="ayuda.js"></script>
+<script type="module" src="recorrido.js"></script>
 <div class="velo" id="veloVitrina">
   <div class="dialogo oscuro">
     <button class="cerrarVitrina" id="cerrarVitrina" aria-label="Cerrar">×</button>
@@ -1152,6 +1153,15 @@
       <label for="ideaTexto">¿Qué te hizo falta?</label>
       <textarea id="ideaTexto" rows="4" maxlength="2000"
         placeholder="Por ejemplo: que la letra se pueda poner arriba, que el corte respete las pausas largas, que exporte a 60 cuadros..."></textarea>
+    </div>
+
+    <!-- El enlace es lo que de verdad sirve para copiar una edicion: la persona
+         vio el reel en Instagram o TikTok y tiene el link a mano, no el archivo.
+         Pedir que suba el video es pedirle 100 MB desde el celular. -->
+    <div class="campo">
+      <label for="ideaEjemplo">¿Viste una edición que te gustó? <s>pega el enlace y la miramos</s></label>
+      <input type="text" id="ideaEjemplo" maxlength="400" inputmode="url"
+        placeholder="https://www.instagram.com/reel/...  o  https://www.tiktok.com/@...">
     </div>
 
     <div class="dosCampos">
