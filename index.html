@@ -361,12 +361,12 @@
   /* --------------------------------------------------------------- centro */
   /* El centro es la escena, y la escena va oscura desde que se abre. Dejarla
      blanca hasta que entre el video hacia que la pagina arrancara toda blanca. */
-  .centro{display:flex;flex-direction:column;overflow:hidden;background:var(--escena)}
+  .centro{display:flex;flex-direction:column;justify-content:center;overflow:hidden;background:var(--escena)}
 
   /* Entrada */
   /* La zona y la barra de descarga van JUNTAS y centradas: el sobrante se
      reparte arriba de una y debajo de la otra. */
-  #zona{margin:auto auto 0;max-width:600px;width:100%;text-align:center;padding:72px 40px;
+  #zona{margin:0 auto;max-width:600px;width:100%;text-align:center;padding:72px 40px;
         background:rgba(255,255,255,.035);border:1px dashed rgba(255,255,255,.2);
         border-radius:12px;cursor:pointer;transition:.15s;color:#EFEDEA}
   #zona:hover,#zona.encima{border-color:var(--ac);background:rgba(248,180,0,.10)}
@@ -379,7 +379,7 @@
   /* Lo que se baja la primera vez, a la vista y mientras la persona busca su
      video. Son los mismos megas; lo que cambia es que no se esperan mirando. */
   body.conVideo #avanceModelo{display:none!important}
-  #avanceModelo{display:none;margin:16px auto auto;max-width:600px;width:100%;
+  #avanceModelo{margin:16px auto 0;max-width:600px;width:100%;
                 padding:0 8px;text-align:center}
   #avanceModelo b{display:block;font-size:12px;font-weight:400;
                   color:rgba(239,237,234,.62);margin-bottom:8px;line-height:1.5}
@@ -1019,7 +1019,7 @@
     </div>
 
     <div id="avanceModelo">
-      <b>Trayendo el reconocimiento de voz</b>
+      <b>Preparando el editor…</b>
       <div class="riel"><i></i></div>
     </div>
 
