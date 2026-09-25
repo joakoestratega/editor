@@ -7,7 +7,7 @@
      Va aqui porque produccion la sirve GitHub Pages, que no manda cabeceras.
      La version completa, con el cierre del iframe y HTTPS obligatorio, esta
      en el archivo `_headers` (Cloudflare). Las dos se mantienen iguales. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' blob: data:; connect-src 'self' https://editor-9qb.pages.dev https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests; form-action 'self'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; child-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' blob: data:; connect-src 'self' https://editor-9qb.pages.dev https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:">
 <title>Editor de reels · Joako Estratega</title>
 <meta name="description" content="Corta los silencios, pone los subtítulos y te deja editar desde el texto. Tu video no sale de tu computador.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -739,7 +739,11 @@
          y no guarda nada. NO se le pone autocompletado ni foco, para que ningun
          gestor de claves lo llene por accidente. -->
     <div style="display:none" aria-hidden="true">
-      <input type="text" id="regEmpresa" name="empresa" tabindex="-1" autocomplete="off">
+      <!-- El nombre NO puede parecerse a nada que el navegador sepa completar
+           ("empresa" si lo reconoce Chrome): si un gestor de claves lo llenara,
+           la persona entraria creyendo que quedo registrada y su dato se
+           perderia sin dejar rastro. -->
+      <input type="text" id="regEmpresa" name="ref2" tabindex="-1" autocomplete="off">
     </div>
     <label class="acepto">
       <input type="checkbox" id="regAcepto">
