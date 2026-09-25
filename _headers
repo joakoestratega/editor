@@ -1,0 +1,20 @@
+# Cabeceras de seguridad del editor. Cloudflare Pages las manda con cada archivo.
+#
+# ⚠️ En joakoestratega.com/editor/ NO sirven: eso lo sirve GitHub Pages, que no
+# permite cabeceras propias. Para ese sitio la misma política va como etiqueta
+# `meta` dentro de index.html, y el iframe lo cierra la guardia de editor.js.
+# Aquí queda la versión completa, que es la única que puede cerrar el iframe de
+# verdad (`frame-ancestors`) y pedir HTTPS siempre (HSTS).
+#
+# Si se agrega un servicio nuevo de donde el editor traiga algo, hay que sumarlo
+# a `connect-src` o el navegador lo bloquea sin avisarle a la persona.
+
+/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' blob: data:; connect-src 'self' https://editor-9qb.pages.dev https://huggingface.co https://*.huggingface.co https://*.hf.co blob: data:; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), midi=()
+  Cross-Origin-Opener-Policy: same-origin
+  ! Access-Control-Allow-Origin

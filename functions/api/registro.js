@@ -84,6 +84,13 @@ export async function onRequest(contexto) {
     return new Response(JSON.stringify({ ok: false, porque: 'sin-permiso' }), { status: 400, headers: cab });
   }
 
+  // El campo escondido de la puerta. Una persona no lo puede llenar porque no lo
+  // ve; un robot que llena todo el formulario si. Se contesta que TODO BIEN a
+  // proposito: si se le dice que fallo, vuelve a intentar cambiando cosas.
+  if (recortar(c.trampa, 4)) {
+    return new Response(JSON.stringify({ ok: true }), { status: 200, headers: cab });
+  }
+
   if (!(await pasaElTope(entorno, peticion, 'registro', POR_HORA))) {
     return new Response(JSON.stringify({ ok: false, porque: 'muchos' }), { status: 429, headers: cab });
   }

@@ -17,6 +17,24 @@ import {
   getFirstEncodableVideoCodec, getFirstEncodableAudioCodec,
 } from './lib/mediabunny.min.mjs';
 
+// ----------------------------------------------------- nadie lo enmarca
+// Metido en un iframe, cualquiera hace pasar este editor por suyo y le pone su
+// marca encima. En Cloudflare lo corta la cabecera `frame-ancestors`; en
+// joakoestratega.com/editor/ no hay cabeceras posibles (GitHub Pages no las
+// permite), asi que se corta aqui. Si preguntar falla, se asume que si esta
+// enmarcado: es lo unico que pasa cuando la pagina de afuera es de otro dominio.
+const ENMARCADO = (() => { try { return window.top !== window.self; } catch { return true; } })();
+if (ENMARCADO) {
+  document.documentElement.innerHTML =
+    '<body style="margin:0;display:grid;place-items:center;height:100vh;background:#0F0F14;'
+    + 'color:#fff;font-family:Montserrat,system-ui,sans-serif;text-align:center;padding:24px">'
+    + '<div><p style="font-size:17px;margin:0 0 14px">Este editor se abre en su propia página.</p>'
+    + '<a href="https://joakoestratega.com/editor/" target="_top" rel="noopener" '
+    + 'style="background:#F8B400;color:#0F0F14;text-decoration:none;font-weight:600;'
+    + 'padding:11px 18px;border-radius:8px;display:inline-block">Abrir el editor</a></div></body>';
+  throw new Error('El editor no funciona dentro de otra página.');
+}
+
 // ------------------------------------------------------------------- ajustes
 const MAX_ENTRADA = 300;       // 5 minutos de material crudo
 const MAX_SALIDA = 90;         // el reel terminado

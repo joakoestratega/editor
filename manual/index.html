@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cómo se usa el editor de video · Joako Estratega</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--negro:#0F0F14;--oro:#F8B400;--azul:#21209C}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--negro);color:#fff;font:400 16px/1.6 Montserrat,system-ui,sans-serif}
+  .caja{max-width:980px;margin:0 auto;padding:0 22px}
+  header.tapa{padding:74px 0 54px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .sello{color:var(--oro);font-weight:800;letter-spacing:.16em;font-size:12px;text-transform:uppercase}
+  h1{font-size:clamp(34px,6vw,58px);line-height:1.05;font-weight:800;margin:14px 0 16px}
+  h1 em{font-style:normal;color:var(--oro)}
+  .bajada{font-size:18px;opacity:.82;max-width:640px}
+  .fecha{margin-top:26px;font-size:13px;opacity:.5}
+  nav{margin:44px 0 10px}
+  nav h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--oro);margin:0 0 14px}
+  nav ol{list-style:none;padding:0;margin:0;display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+  nav a{display:flex;gap:11px;align-items:center;color:#fff;text-decoration:none;background:rgba(255,255,255,.04);
+        border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:12px 15px;font-size:14.5px}
+  nav a:hover{border-color:var(--oro)}
+  nav b{background:var(--oro);color:var(--negro);width:25px;height:25px;border-radius:50%;
+        display:grid;place-items:center;font-size:13px;flex:none}
+  .paso{padding:58px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+  .num{color:var(--oro);font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+  .paso h2{font-size:clamp(26px,4vw,38px);margin:9px 0 14px;font-weight:800;line-height:1.14}
+  .entrada{font-size:17px;opacity:.86;margin:0 0 26px;max-width:720px}
+  figure{margin:0 0 24px}
+  figure img{width:100%;border-radius:14px;border:1px solid rgba(255,255,255,.14);display:block}
+  ol.marcas{counter-reset:m;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  ol.marcas li{counter-increment:m;display:flex;gap:12px;align-items:flex-start;
+               background:rgba(248,180,0,.07);border-left:3px solid var(--oro);
+               border-radius:0 10px 10px 0;padding:11px 15px}
+  ol.marcas li::before{content:counter(m);background:var(--oro);color:var(--negro);font-weight:800;
+               width:23px;height:23px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;flex:none;margin-top:1px}
+  ol.marcas b{font-weight:600}
+  .cierre{margin:22px 0 0;padding:14px 17px;background:rgba(33,32,156,.22);border:1px solid rgba(33,32,156,.5);
+          border-radius:11px;font-size:15px}
+  .falta{opacity:.5;font-style:italic}
+  .tabla-zona{padding:58px 0}
+  .tabla-zona h2{font-size:30px;font-weight:800;margin:0 0 8px}
+  .tabla-zona h3{color:var(--oro);font-size:15px;letter-spacing:.1em;text-transform:uppercase;margin:36px 0 12px}
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  th{text-align:left;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.55;
+     padding:0 12px 9px;font-weight:700}
+  td{padding:11px 12px;border-top:1px solid rgba(255,255,255,.1);vertical-align:top}
+  td:first-child{white-space:nowrap;color:var(--oro)}
+  td:last-child{opacity:.7}
+  footer{padding:46px 0 70px;opacity:.55;font-size:14px}
+  @media print{body{background:#fff;color:#000}figure img{border-color:#ccc}
+    nav a,ol.marcas li{background:#f4f4f4;color:#000}}
+</style></head>
+<body>
+<header class="tapa"><div class="caja">
+  <div class="sello">Joako Estratega</div>
+  <h1>Cómo se usa el <em>editor de video</em></h1>
+  <p class="bajada">Paso por paso, con la pantalla de verdad y el botón marcado.
+     Si vas de afán, en el editor hay un botón <b>?</b> que te explica cada cosa sin salir de ahí.</p>
+  <div class="fecha">Al día del 24 de septiembre de 2026</div>
+  <nav><h2>Lo que vas a hacer</h2><ol><li><a href="#puerta"><b>1</b> Entrar al editor</a></li>
+<li><a href="#soltar"><b>2</b> Soltar el video</a></li>
+<li><a href="#mesa"><b>3</b> La mesa de edición</a></li>
+<li><a href="#texto"><b>4</b> Quitar y devolver palabras</a></li>
+<li><a href="#subtitulos"><b>5</b> Los subtítulos</a></li>
+<li><a href="#corte"><b>6</b> El corte automático</a></li>
+<li><a href="#imagen"><b>7</b> Color, cámara y memes</a></li>
+<li><a href="#guardar"><b>8</b> Guardar tu estilo</a></li>
+<li><a href="#exportar"><b>9</b> Sacar el video</a></li></ol></nav>
+</div></header>
+
+<div class="caja">
+
+  <section class="paso" id="puerta">
+    <div class="num">Paso 1</div>
+    <h2>Entrar al editor</h2>
+    <p class="entrada">La primera vez el editor te pide tus datos. Es una sola vez: la próxima vez que abras, entra directo.</p>
+    <figure><img src="fotos/puerta.png" alt="Entrar al editor"></figure>
+    <ol class="marcas">
+      <li><b>Escribe tu nombre</b></li>
+      <li><b>Tu WhatsApp, por si te falla algo</b></li>
+      <li><b>Tu correo</b></li>
+      <li><b>Marca esta casilla</b></li>
+      <li><b>Clic aquí para entrar</b></li>
+    </ol>
+    <p class="cierre">La primera vez se demora un poco porque trae el reconocimiento de voz. Déjalo terminar.</p>
+  </section>
+
+  <section class="paso" id="soltar">
+    <div class="num">Paso 2</div>
+    <h2>Soltar el video</h2>
+    <p class="entrada">Esta es la pantalla con la que te vas a encontrar siempre. Tu video no se sube a ningún lado: todo pasa dentro de tu navegador.</p>
+    <figure><img src="fotos/soltar.png" alt="Soltar el video"></figure>
+    <ol class="marcas">
+      <li><b>Arrastra tu video aquí, o haz clic para buscarlo</b></li>
+      <li><b>Si te pierdes, clic aquí y te explico cada botón</b></li>
+      <li><b>El video de cómo se usa</b></li>
+    </ol>
+    
+  </section>
+
+  <section class="paso" id="mesa">
+    <div class="num">Paso 3</div>
+    <h2>La mesa de edición</h2>
+    <p class="entrada">Cuando el editor termina de escuchar tu video, se abre la mesa. A la izquierda está el panel con todo lo que puedes cambiar; en el centro, tu video ya cortado; abajo, todo lo que dijiste.</p>
+    <figure><img src="fotos/mesa.png" alt="La mesa de edición"></figure>
+    <ol class="marcas">
+      <li><b>Así va quedando tu reel</b></li>
+      <li><b>Clic para verlo</b></li>
+      <li><b>Todo lo que puedes cambiar</b></li>
+      <li><b>Todo lo que dijiste</b></li>
+    </ol>
+    <p class="cierre">Arriba a la derecha, "Queda" te dice cuánto va a durar el reel ya cortado.</p>
+  </section>
+
+  <section class="paso" id="texto">
+    <div class="num">Paso 4</div>
+    <h2>Quitar y devolver palabras</h2>
+    <p class="entrada">Lo tachado es lo que el editor sacó: silencios, repeticiones y muletillas. Tú mandas: un clic saca una palabra, otro clic la devuelve.</p>
+    <figure><img src="fotos/texto.png" alt="Quitar y devolver palabras"></figure>
+    <ol class="marcas">
+      <li><b>Un clic la saca. Otro la devuelve</b></li>
+      <li><b>Corregir cómo se escribe</b></li>
+      <li><b>Marcarla como palabra clave</b></li>
+      <li><b>Partir la frase desde aquí</b></li>
+      <li><b>Devolver todo y empezar de nuevo</b></li>
+    </ol>
+    
+  </section>
+
+  <section class="paso" id="subtitulos">
+    <div class="num">Paso 5</div>
+    <h2>Los subtítulos</h2>
+    <p class="entrada">Aquí eliges cómo se ven las letras sobre tu video. Lo que cambies se ve al instante, sin tener que exportar.</p>
+    <figure><img src="fotos/subtitulos.png" alt="Los subtítulos"></figure>
+    <ol class="marcas">
+      <li><b>El diseño completo: caja, karaoke, neón, oro</b></li>
+      <li><b>Los colores de la letra, el borde y la caja</b></li>
+      <li><b>La palabra clave: color y tamaño</b></li>
+      <li><b>Sube el subtítulo para que Instagram no lo tape</b></li>
+    </ol>
+    
+  </section>
+
+  <section class="paso" id="corte">
+    <div class="num">Paso 6</div>
+    <h2>El corte automático</h2>
+    <p class="entrada">Esto es lo que hace el trabajo pesado: el editor mide el sonido y corta solo lo que sobra.</p>
+    <figure><img src="fotos/corte.png" alt="El corte automático"></figure>
+    <ol class="marcas">
+      <li><b>Quita los pedazos donde nadie habla</b></li>
+      <li><b>Cuando repites la frase, deja la última</b></li>
+      <li><b>Saca los eh, mm y o sea</b></li>
+      <li><b>Rápido o preciso: mira cuánto pesa cada uno</b></li>
+    </ol>
+    
+  </section>
+
+  <section class="paso" id="imagen">
+    <div class="num">Paso 7</div>
+    <h2>Color, cámara y memes</h2>
+    <p class="entrada">Con esto el video deja de verse plano: la cámara se mueve sola sobre tu cara y puedes meter un meme en medio.</p>
+    <figure><img src="fotos/imagen.png" alt="Color, cámara y memes"></figure>
+    <ol class="marcas">
+      <li><b>Corrige el color de la imagen</b></li>
+      <li><b>Reparte los efectos entre las frases</b></li>
+      <li><b>Mete un meme después de esa frase</b></li>
+    </ol>
+    
+  </section>
+
+  <section class="paso" id="guardar">
+    <div class="num">Paso 8</div>
+    <h2>Guardar tu estilo</h2>
+    <p class="entrada">Cuando el panel quede como te gusta, guárdalo con un nombre. La próxima vez lo pones con un clic.</p>
+    <figure><img src="fotos/guardar.png" alt="Guardar tu estilo"></figure>
+    <ol class="marcas">
+      <li><b>Clic aquí para guardar cómo quedó todo</b></li>
+      <li><b>Las que ya guardaste</b></li>
+    </ol>
+    
+  </section>
+
+  <section class="paso" id="exportar">
+    <div class="num">Paso 9</div>
+    <h2>Sacar el video</h2>
+    <p class="entrada">Cuando esté listo, exporta. El video se arma en tu propio computador, así que trabájalo con la pestaña abierta.</p>
+    <figure><img src="fotos/exportar.png" alt="Sacar el video"></figure>
+    <ol class="marcas">
+      <li><b>Clic aquí para armar el video final</b></li>
+      <li><b>O empieza con otro video</b></li>
+      <li><b>Lo que va a durar el reel</b></li>
+    </ol>
+    <p class="cierre">Cuando termine sale el video con el botón de descargar. Sale sin marca de agua.</p>
+  </section>
+
+<div class="tabla-zona">
+  <h2>Qué hace cada botón</h2>
+  <p class="entrada">La lista completa, para buscar con Ctrl+F.</p>
+  
+    <h3>Entrar al editor</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Tu nombre</b></td><td>Con esto te saludamos y sabemos quién nos escribe si algo falla.</td><td>—</td></tr>
+      <tr><td><b>Indicativo del país</b></td><td>Abre la lista de países y pone el código delante de tu número.</td><td>Puedes escribir el nombre del país para encontrarlo rápido.</td></tr>
+      <tr><td><b>Tu WhatsApp</b></td><td>Es por donde te respondemos si el editor te falla con un video.</td><td>—</td></tr>
+      <tr><td><b>Tu correo</b></td><td>Te avisamos por aquí cuando el editor tenga algo nuevo.</td><td>—</td></tr>
+      <tr><td><b>Aceptar el trato de datos</b></td><td>Dice que estás de acuerdo con que guardemos tus datos para responderte.</td><td>Sin esta casilla, el botón de entrar no se prende.</td></tr>
+      <tr><td><b>Acepto y empiezo</b></td><td>Te deja entrar y trae el reconocimiento de voz.</td><td>La primera vez se demora porque lo baja. Después abre de una.</td></tr>
+      <tr><td><b>Ver cómo se usa</b></td><td>Abre el video de dos minutos que muestra el editor completo.</td><td>—</td></tr>
+      <tr><td><b>Mandarme el link</b></td><td>Te manda la dirección del editor para que la abras en un computador.</td><td>—</td></tr>
+      <tr><td><b>Copiar el link</b></td><td>Copia la dirección del editor para pegarla donde quieras.</td><td>—</td></tr>
+      <tr><td><b>Versión Lite</b></td><td>Abre la versión liviana, que sí funciona en el celular.</td><td>Hace menos cosas, pero no necesita computador.</td></tr>
+      <tr><td><b>Cómo se usa</b></td><td>Abre el video que muestra el editor completo, paso por paso.</td><td>—</td></tr>
+      <tr><td><b>Manual</b></td><td>Abre el manual escrito, con la pantalla de cada paso y el botón marcado.</td><td>Se abre en otra pestaña, así no pierdes lo que llevas hecho.</td></tr>
+      <tr><td><b>Explicarme cada botón</b></td><td>Prende el modo ayuda: tocas cualquier cosa y te dice qué hace, sin activarla.</td><td>Para apagarlo, vuelve a tocarlo o aprieta la tecla Escape.</td></tr>
+      <tr><td><b>Lo que hacemos</b></td><td>Abre lo que hace Joako Estratega por los negocios que no dan abasto.</td><td>—</td></tr>
+      <tr><td><b>Qué le agregamos</b></td><td>Te abre un cuadro para contarnos qué te hizo falta.</td><td>Lo leemos todo. Varias cosas del editor salieron de ahí.</td></tr>
+    </table>
+
+    <h3>Soltar el video</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Suelta aquí tu video</b></td><td>Arrastra el video hasta aquí, o haz clic para buscarlo en tu computador.</td><td>El video no se sube a ningún lado: todo pasa dentro de tu navegador.</td></tr>
+      <tr><td><b>Cambiar video</b></td><td>Bota el video de ahora y te deja soltar otro.</td><td>Lo que ajustaste en el panel se queda como está.</td></tr>
+      <tr><td><b>Grabado</b></td><td>Lo que dura tu video tal como lo grabaste.</td><td>—</td></tr>
+      <tr><td><b>Queda</b></td><td>Lo que va a durar el reel ya con los cortes puestos.</td><td>Es el número que importa. El editor arma reels de hasta 90 segundos.</td></tr>
+      <tr><td><b>Fuera</b></td><td>Lo que el editor quitó: silencios, repeticiones y muletillas.</td><td>—</td></tr>
+    </table>
+
+    <h3>Arreglar lo que dices</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Una palabra tuya</b></td><td>Un clic la saca del video. Otro clic la devuelve.</td><td>La palabra tachada es la que no va a quedar.</td></tr>
+      <tr><td><b>Corregir la palabra</b></td><td>Cambia cómo se escribe esa palabra en el subtítulo.</td><td>Sirve cuando el reconocimiento entendió mal un nombre o una marca.</td></tr>
+      <tr><td><b>Palabra clave</b></td><td>Marca esa palabra como la importante de la frase, o le quita la marca.</td><td>La palabra clave sale resaltada y más grande, como en los anuncios.</td></tr>
+      <tr><td><b>Partir la frase</b></td><td>Desde esa palabra empieza una frase nueva.</td><td>Sirve cuando un subtítulo quedó muy largo para leerlo de un vistazo.</td></tr>
+      <tr><td><b>Unir con la de arriba</b></td><td>Pega esta frase con la anterior y quedan en un solo subtítulo.</td><td>—</td></tr>
+      <tr><td><b>Devolver todo</b></td><td>Vuelve a meter todas las palabras que habías sacado.</td><td>Para empezar de nuevo sin soltar el video otra vez.</td></tr>
+    </table>
+
+    <h3>Los subtítulos</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Subtítulos sí o no</b></td><td>Pone o quita los subtítulos de todo el video.</td><td>—</td></tr>
+      <tr><td><b>Estilos de subtítulo</b></td><td>Cambia el diseño completo del subtítulo: caja, karaoke, neón, oro.</td><td>Lo ves al instante sobre tu video, sin tener que exportar.</td></tr>
+      <tr><td><b>Tipografía</b></td><td>Cambia el tipo de letra del subtítulo.</td><td>—</td></tr>
+      <tr><td><b>Color de la letra</b></td><td>El color con el que se escribe el subtítulo.</td><td>—</td></tr>
+      <tr><td><b>Código del color</b></td><td>Escribe aquí el código exacto de tu marca, por ejemplo #F8B400.</td><td>—</td></tr>
+      <tr><td><b>Borde de la letra</b></td><td>Pone el contorno alrededor de la letra.</td><td>Sin borde, la letra se pierde cuando el fondo del video es claro.</td></tr>
+      <tr><td><b>Caja detrás del texto</b></td><td>Pone el rectángulo de color detrás del subtítulo.</td><td>—</td></tr>
+      <tr><td><b>Color del borde</b></td><td>El color del contorno que rodea la letra.</td><td>—</td></tr>
+      <tr><td><b>Código del borde</b></td><td>El código exacto del color del contorno, por ejemplo #0F0F14.</td><td>—</td></tr>
+      <tr><td><b>Color de la caja</b></td><td>El color del rectángulo que va detrás del texto.</td><td>—</td></tr>
+      <tr><td><b>Código de la caja</b></td><td>El código exacto del color de la caja, por ejemplo #F8B400.</td><td>—</td></tr>
+      <tr><td><b>Código de la palabra clave</b></td><td>El código exacto del color con el que se resalta la palabra clave.</td><td>—</td></tr>
+      <tr><td><b>Ver todos los estilos</b></td><td>Abre la ventana con todos los estilos de subtítulo, con su muestra.</td><td>—</td></tr>
+      <tr><td><b>Colores de tu marca</b></td><td>Le pone al color que estás editando uno de los colores guardados.</td><td>—</td></tr>
+      <tr><td><b>Elegirlas solas</b></td><td>Deja que el editor escoja la palabra más importante de cada frase.</td><td>Si no te gusta la que eligió, la cambias con la estrella en el texto de abajo.</td></tr>
+      <tr><td><b>Color de la palabra clave</b></td><td>El color con el que se pinta la palabra resaltada.</td><td>—</td></tr>
+      <tr><td><b>Tamaño de la palabra clave</b></td><td>Hace la palabra clave más grande que el resto de la frase.</td><td>Subirlo un poco es lo que le da cara de anuncio al reel.</td></tr>
+      <tr><td><b>Tamaño de letra</b></td><td>Agranda o achica todo el subtítulo.</td><td>—</td></tr>
+      <tr><td><b>Altura en pantalla</b></td><td>Sube o baja el subtítulo dentro del video.</td><td>Déjalo alto para que el nombre de la cuenta no lo tape en Instagram.</td></tr>
+      <tr><td><b>Fondo visible</b></td><td>Qué tanto se ve la caja de color detrás del texto.</td><td>—</td></tr>
+      <tr><td><b>Entrada con salto</b></td><td>Hace que el subtítulo aparezca creciendo, en vez de aparecer pegado.</td><td>—</td></tr>
+    </table>
+
+    <h3>El corte automático</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Corte automático</b></td><td>Prende o apaga todos los cortes de una vez.</td><td>Apagado, el video queda completo tal como lo grabaste.</td></tr>
+      <tr><td><b>Quitar los silencios</b></td><td>Mide el sonido y corta los pedazos donde nadie habla.</td><td>Es lo que más acorta el video y lo que hace que se sienta rápido.</td></tr>
+      <tr><td><b>Quitar tomas repetidas</b></td><td>Cuando te equivocas y vuelves a empezar la frase, deja solo la última.</td><td>—</td></tr>
+      <tr><td><b>Quitar muletillas</b></td><td>Saca los eh, mm y o sea del video y del subtítulo.</td><td>—</td></tr>
+      <tr><td><b>Qué tan bien te oye</b></td><td>Elige el reconocimiento de voz: el rápido o el preciso.</td><td>El rápido trae 286 MB y se le escapan palabras. El preciso acierta más, pero trae 932 MB la primera vez.</td></tr>
+    </table>
+
+    <h3>Color, movimiento y recursos</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Color</b></td><td>Corrige el color de la imagen con un estilo ya hecho.</td><td>Sirve cuando grabaste con luz amarilla o la imagen salió apagada.</td></tr>
+      <tr><td><b>Estilos de color</b></td><td>Elige el tono de la imagen: más cálido, más frío, más contrastado.</td><td>—</td></tr>
+      <tr><td><b>Fuerza del color</b></td><td>Qué tan fuerte se aplica el estilo de color.</td><td>—</td></tr>
+      <tr><td><b>Movimiento de cámara</b></td><td>Hace que la cámara se acerque y se aleje sola mientras hablas.</td><td>El editor encuentra tu cara y cierra sobre ella. Es lo que hace que el reel se sienta vivo.</td></tr>
+      <tr><td><b>Repartirla sola</b></td><td>Reparte los acercamientos y el blanco y negro entre las frases, sin que tú elijas.</td><td>Si prefieres decidir frase por frase, apágalo y usa la lista de cada frase abajo.</td></tr>
+      <tr><td><b>Qué tan cerca</b></td><td>Qué tanto se acerca la cámara cuando cierra sobre ti.</td><td>—</td></tr>
+      <tr><td><b>Efecto de esta frase</b></td><td>Elige qué le pasa al video mientras se dice esa frase.</td><td>Acercar, alejar o blanco y negro. Cambiarlo entre frases es lo que evita que se vea plano.</td></tr>
+      <tr><td><b>Meter un recurso</b></td><td>Mete un meme, un b-roll o una tarjeta justo después de esa frase.</td><td>—</td></tr>
+      <tr><td><b>Recursos metidos</b></td><td>La lista de memes, tarjetas y videos que metiste en medio.</td><td>—</td></tr>
+      <tr><td><b>Quitar este recurso</b></td><td>Saca ese meme o ese video de la lista.</td><td>—</td></tr>
+      <tr><td><b>Quitar este recurso</b></td><td>Saca ese recurso del video.</td><td>—</td></tr>
+      <tr><td><b>Recurso listo</b></td><td>Mete ese meme o esa tarjeta en el punto que elegiste.</td><td>Pasa el mouse por encima para verlo moverse antes de meterlo.</td></tr>
+      <tr><td><b>Sube el tuyo</b></td><td>Mete un meme o un video corto tuyo, en vez de uno de la lista.</td><td>—</td></tr>
+    </table>
+
+    <h3>Velocidad y volumen</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Velocidad</b></td><td>Acelera todo el video sin que la voz suene rara.</td><td>Un 1.1x se nota poco y le quita segundos al reel.</td></tr>
+      <tr><td><b>Emparejar el volumen</b></td><td>Sube la voz al nivel que usan las redes y deja todo parejo.</td><td>—</td></tr>
+    </table>
+
+    <h3>Guardar tu estilo</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Guardar todo con un nombre</b></td><td>Guarda cómo quedó el panel completo, con el nombre que le pongas.</td><td>Así tienes una configuración por marca o por cliente, y cambias con un clic.</td></tr>
+      <tr><td><b>Mis configuraciones</b></td><td>Las configuraciones que ya guardaste. Un clic la vuelve a poner.</td><td>—</td></tr>
+      <tr><td><b>Nombre de la configuración</b></td><td>Cómo se va a llamar. Por ejemplo, el nombre de tu marca.</td><td>—</td></tr>
+    </table>
+
+    <h3>Sacar el video</h3>
+    <table>
+      <tr><th>Control</th><th>Qué hace</th><th>Cuándo te sirve</th></tr>
+      <tr><td><b>Reproducir</b></td><td>Toca el video con todo lo que llevas puesto.</td><td>Es la vista previa: lo que ves aquí es lo que va a salir.</td></tr>
+      <tr><td><b>Barra de tiempo</b></td><td>Te lleva a cualquier momento del video.</td><td>—</td></tr>
+      <tr><td><b>Exportar</b></td><td>Arma el video final con los cortes, los subtítulos y los efectos.</td><td>Se demora unos minutos y trabaja tu computador. No cierres la pestaña.</td></tr>
+      <tr><td><b>Descargar el video</b></td><td>Guarda el reel terminado en tu computador, sin marca de agua.</td><td>—</td></tr>
+      <tr><td><b>Seguir ajustando</b></td><td>Te devuelve a la mesa con todo como lo dejaste.</td><td>—</td></tr>
+      <tr><td><b>Editar otro</b></td><td>Empieza con un video nuevo y te deja el mismo estilo puesto.</td><td>—</td></tr>
+    </table>
+</div>
+
+<footer>Hecho por Joako Estratega. Este manual se vuelve a armar solo cada vez que el editor cambia.</footer>
+</div>
+</body></html>

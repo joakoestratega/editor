@@ -13,6 +13,10 @@
 // cuántos lo abren, cuántos sueltan un video, cuántos llegan a exportar,
 // dónde se caen, qué opciones usan y con qué videos falla.
 
+// El borrado de lo que ya cumplio 12 meses se cuelga de aqui, que es el servicio
+// con mas trafico. Corre despues de contestar: nadie espera por eso.
+import { purgarDeVezEnCuando } from './_purga.js';
+
 const ORIGENES = [
   'https://joakoestratega.com',
   'https://editor-9qb.pages.dev',
@@ -119,6 +123,8 @@ export async function onRequest(contexto) {
     // Si la cuenta falla, la persona no se entera: esto NUNCA puede estorbarle.
     return new Response(JSON.stringify({ ok: false }), { status: 200, headers: cab });
   }
+
+  purgarDeVezEnCuando(contexto);
 
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: cab });
 }
